@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -24,6 +25,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Microsoft YaHei","PingFang SC
 .toolbar button:hover{background:#111;color:#fff}
 .toolbar button.off{color:#bbb;border-color:#ddd}.toolbar button.off:hover{background:#fff;color:#bbb}
 .toolbar button.rec-on,.toolbar button.listen-on,.toolbar button.mode-on{background:#111;color:#fff}
+
+/* 工具栏统一着装 —— 黑字点击变红 */
+.btn-normal { border: 1px solid #111 !important; color: #111 !important; background: #fff !important; font-weight: 600; }
+.btn-normal:active { background-color: #800020 !important; color: #fff !important; border-color: #800020 !important; }
+
+/* 第二排红字点击变红 */
+.btn-red { border: 1px solid #800020 !important; color: #800020 !important; background: #fff !important; font-weight: 600; }
+.btn-red:active { background-color: #800020 !important; color: #fff !important; }
+
 .rate-wrap{display:inline-flex;align-items:center;gap:9px;font-size:12.5px;color:#666;letter-spacing:.03em;border:1px solid #ddd;padding:0 12px;border-radius:2px;height:30px}
 .rate-wrap input[type=range]{-webkit-appearance:none;appearance:none;width:76px;height:2px;background:#111;outline:none;cursor:pointer}
 .rate-wrap input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:12px;height:12px;border-radius:50%;background:#111;cursor:pointer}
@@ -50,8 +60,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Microsoft YaHei","PingFang SC
 .sub-tab.has-content::after{content:" ●";color:#0a7a3a;font-size:10px}
 .sub-tab.active.has-content::after{color:#fff}
 
-.article-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:6px}
-.last-review{font-size:12px;color:#999;letter-spacing:.03em}
+.article-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:6px}
+.last-review{font-size:12px;color:#666;letter-spacing:.03em}
 .last-review.fresh{color:#0a7a3a}
 .last-review.stale{color:#c0392b}
 .mark-btn{padding:4px 12px;font-size:12px;border:1px solid #111;background:#fff;color:#111;cursor:pointer;font-family:inherit;border-radius:2px;transition:.15s;letter-spacing:.03em}
@@ -89,7 +99,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Microsoft YaHei","PingFang SC
 .outline-edit-btn:hover{background:#111;color:#fff}
 .outline-body{display:none;padding:14px 16px 20px;border-top:1px solid #eee}
 .outline-card.open .outline-body{display:block}
-.outline-para{margin-bottom:20px}
+.outline-para{margin-bottom:20px;padding:6px;border-radius:3px;transition:background .3s;scroll-margin-top:100px}
 .outline-para:last-child{margin-bottom:0}
 .outline-para-label{font-size:12px;letter-spacing:.12em;color:#111;margin-bottom:10px;padding-bottom:5px;border-bottom:1px solid #111;display:flex;justify-content:space-between;align-items:baseline;font-weight:600}
 .outline-para-label .pl-tag{color:#800020;font-weight:600;letter-spacing:.05em;font-size:11px}
@@ -102,21 +112,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Microsoft YaHei","PingFang SC
 .outline-item.black-item:hover::before{color:#fff}
 .outline-empty{color:#999;font-size:13px;text-align:center;padding:16px}
 .empty{color:#999;font-size:14px;text-align:center;padding:60px 0}
-.listen-bar{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:#fff;border:1px solid #111;border-radius:4px;padding:10px 14px;z-index:60;display:none;align-items:center;gap:12px;box-shadow:0 6px 26px rgba(0,0,0,.10);font-size:13px;max-width:calc(100vw - 32px);flex-wrap:wrap;justify-content:center}
-.listen-bar.show{display:flex}
-.listen-bar button{background:none;border:none;color:#111;cursor:pointer;font-family:inherit;font-size:16px;padding:4px 6px;line-height:1;border-radius:2px;transition:background .12s}
-.listen-bar button:hover{background:#f2f2f2}
-.listen-bar #lbPlay{font-size:15px;font-weight:600;padding:4px 10px}
-.listen-bar #lbLoop{font-size:13px;padding:4px 8px;border:1px solid #ddd;border-radius:2px;margin-left:4px;color:#666}
-.listen-bar #lbLoop.on{background:#111;color:#fff;border-color:#111}
-.lb-progress{color:#111;font-variant-numeric:tabular-nums;min-width:60px;text-align:center;letter-spacing:.05em;font-size:12px}
-.lb-timer{color:#800020;font-weight:600;font-variant-numeric:tabular-nums;font-size:12px;letter-spacing:.05em}
-.lb-rate{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:#666;border-left:1px solid #eee;padding-left:12px}
-.lb-rate input[type=range]{-webkit-appearance:none;appearance:none;width:56px;height:2px;background:#111;outline:none;cursor:pointer}
-.lb-rate input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:10px;height:10px;border-radius:50%;background:#111;cursor:pointer}
-.lb-rate input[type=range]::-moz-range-thumb{width:10px;height:10px;border-radius:50%;background:#111;cursor:pointer;border:none}
-.lb-close{border-left:1px solid #eee;padding-left:10px !important;color:#bbb !important;font-size:14px !important}
-.lb-close:hover{color:#111 !important}
 .overlay{display:none;position:fixed;inset:0;background:rgba(255,255,255,.98);z-index:100;overflow-y:auto;padding:20px 16px 60px}
 .overlay.show{display:block}
 .overlay-inner{max-width:700px;margin:0 auto}
@@ -134,7 +129,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Microsoft YaHei","PingFang SC
 .toc-row .move-btn:disabled:hover{background:#f7f7f7;color:#666;border-color:#ddd}
 .toc-row .sel-wrap{display:flex;align-items:center;padding:0 2px}
 .toc-row .sel-wrap input{width:18px;height:18px;accent-color:#800020;cursor:pointer}
-.toc-row .toc-item{flex:1;text-align:left;padding:10px 14px;border:1px solid #eee;border-radius:2px;background:#fff;font-family:inherit;font-size:15px;color:#333;cursor:pointer;line-height:1.5;transition:.12s;display:flex;flex-direction:column;gap:2px;position:relative}
+.toc-row .toc-item{
+  flex:1; text-align:left; padding:6px 10px;
+  border:1px solid #eee; border-radius:2px; background:#fff;
+  font-family:inherit; font-size:14px; color:#333; cursor:pointer;
+  line-height:1.4; transition:.12s; display:flex; flex-direction:column; gap:2px; position:relative;
+}
+.toc-row .toc-item .row1{display:flex; align-items:center; gap:8px; font-weight:600;}
+.toc-row .toc-item .last{font-size:11px; margin-left:22px; margin-top:2px;}
 .toc-row .toc-item:hover{border-color:#111}
 .toc-row .toc-item.active{border-color:#111;background:#f7f7f7;font-weight:600;color:#111}
 .toc-row .toc-item .row1{display:flex;align-items:center;gap:8px}
@@ -250,6 +252,62 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Microsoft YaHei","PingFang SC
   border-radius: 2px;
 }
 
+/* ===== 极简侧拉目录 ===== */
+#tocOverlay {
+  display: block !important;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+  z-index: 100;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+#tocOverlay.show { opacity: 1; pointer-events: auto; }
+#tocOverlay .drawer {
+  position: absolute; left: -100%; top: 0; bottom: 0;
+  width: 72%; max-width: 290px; 
+  background: #fdfdfd;
+  box-shadow: 10px 0 30px rgba(0,0,0,0.1);
+  transition: left 0.3s cubic-bezier(0.22,0.61,0.36,1);
+  display: flex; flex-direction: column;
+}
+#tocOverlay.show .drawer { left: 0; }
+#tocOverlay .drawer-header {
+  padding: 20px; border-bottom: 1px solid #eee;
+  display: flex; justify-content: space-between; align-items: center;
+}
+#tocOverlay .drawer-header h3 { margin: 0; font-size: 16px; color: #800020; font-weight: 600; letter-spacing: 1px;}
+#tocOverlay .drawer-body { padding: 15px; overflow-y: auto; flex: 1; }
+#tocOverlay .drawer-footer { padding: 15px; border-top: 1px solid #eee; background: #fff; }
+
+/* ===== 极简右侧悬浮条 ===== */
+.listen-bar {
+  position: fixed; right: 8px; top: 55%; transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(0,0,0,0.05); border-radius: 12px;
+  padding: 10px 6px; z-index: 60;
+  display: none; flex-direction: column; align-items: center; gap: 10px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05);
+  width: 44px;
+}
+.listen-bar.show { display: flex; }
+.listen-bar button {
+  background: none; border: none; color: #111; cursor: pointer;
+  font-family: inherit; font-size: 16px; padding: 0;
+  border-radius: 6px; transition: all 0.2s ease;
+  display: flex; justify-content: center; align-items: center;
+  width: 32px; height: 32px;
+}
+.listen-bar button:hover { background: #f0f0f0; color: #800020; }
+.listen-bar #lbPlay { font-size: 18px; font-weight: 600; color: #800020; }
+.lb-progress { color: #800020; font-variant-numeric: tabular-nums; font-size: 11px; font-weight: 700; }
+.lb-speed { font-size: 12px; font-weight: 700; background: #f0f0f0; color: #333; }
+.lb-speed:hover { background: #800020; color: #fff; }
+.listen-bar #lbLoop { font-size: 11px; background: #f0f0f0; color: #333; }
+.listen-bar #lbLoop.on { background: #800020; color: #fff; }
+.lb-close { color: #999 !important; font-size: 18px !important; }
+
 @media print{
   .toolbar,.tabs-row,.tabs-row-2,.listen-bar,.outline-card,.upload-panel,
   .modal-overlay,.overlay,.rec-hint,.voice-row,.pager,.article-title::before,
@@ -268,7 +326,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Microsoft YaHei","PingFang SC
 }
 
 /* ============================================================
-   概念地图专用样式（采纳用户提供的新版本）
+   概念地图专用样式
    ============================================================ */
 #map-view {
   --bg: #0A0A0C;
@@ -334,7 +392,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Microsoft YaHei","PingFang SC
 .family .name { font-weight:700; line-height:1.25; letter-spacing:0.5px; position:relative; z-index:2; }
 .family .meta { font-size:12px; opacity:0.72; margin-top:6px; letter-spacing:0.5px; position:relative; z-index:2; }
 
-/* 核心球体 */
 .core {
   background: radial-gradient(circle at 32% 28%, var(--burgundy-light), var(--burgundy) 45%, var(--burgundy-deep));
   box-shadow: 0 0 90px rgba(107,21,32,0.45), inset 0 0 60px rgba(0,0,0,0.35);
@@ -751,41 +808,26 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Microsoft YaHei","PingFang SC
 <div class="tabs-row" id="tabsRow1"></div>
 <div class="tabs-row-2" id="tabsRow2"></div>
 
-<div class="toolbar">
-  <button onclick="allOn()">全部显示</button>
-  <button onclick="allOff()">全部隐藏</button>
-  <button onclick="openLibrary()" style="border-color:#0b5394; color:#0b5394; font-weight:600;">📁 资料库</button>
-  <button onclick="openMap()" style="border-color:#800020; color:#800020; font-weight:600;">📍 概念地图</button>
-  <button onclick="addNewCircle()" style="border-color:#0a7a3a; color:#0a7a3a; font-weight:600;">➕ 圈层</button>
-  <button onclick="openToc()">目录与删除</button>
-  <button id="reviewBtn" onclick="openReview()">复习</button>
-  <button id="voiceBtn" onclick="toggleVoice()">朗读 开</button>
-  <button id="listenBtn" onclick="toggleListen()">听整篇</button>
-  <button id="listenOutlineBtn" onclick="toggleListenOutline()">听脉络卡</button>
-  <button id="loopBtn" onclick="toggleLoop()">循环本篇</button>
-  <button id="selLoopBtn" onclick="toggleSelectLoop()">循环听选中</button>
-  <button id="recBtn" onclick="toggleRecMode()">录音模式</button>
-  <button id="timerBtn" onclick="toggleTimerPanel()">定时关闭</button>
-  <button onclick="toggleVoiceRow()">选声音</button>
-  <label class="rate-wrap">语速
-    <input type="range" id="rate" min="0.8" max="2" step="0.1" value="1.1">
-    <span id="rateVal">1.1</span>
-  </label>
-  <button onclick="toggleUpload()">上传</button>
-  <button onclick="printThis()">打印本篇</button>
-  <button onclick="exportAll()">导出备份</button>
-  <button onclick="importAll()">导入备份</button>
-</div>
-
-<div class="voice-row" id="voiceRow">
-  <span>中文声音（大陆）</span>
-  <select id="voiceSelect"></select>
-  <button class="try" onclick="tryVoice()">试听</button>
-  <span class="note" id="voiceNote"></span>
-</div>
-
-<div class="rec-hint" id="recHint">
-  <b>录音模式</b>：点空格开始录，再点停止。已录的空格下划线加粗。长按已录的空格删除录音。
+<div class="toolbar" style="flex-direction: column; align-items: flex-start; gap: 8px;">
+  <!-- 第一排：黑色 -->
+  <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+    <button onclick="openToc()" class="btn-normal">≡ 目录</button>
+    <button onclick="addNewCircle()" class="btn-normal">⊕ 圈层</button>
+    <button onclick="openReview()" class="btn-normal">○ 复习进度</button>
+    <button onclick="openMap()" class="btn-normal">△ 概念地图</button>
+  </div>
+  <!-- 第二排：红色，点击色块变红 -->
+  <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+    <button onclick="toggleListenPanel()" class="btn-red">▷ 听读控制</button>
+    <button onclick="toggleAllBlank()" id="toggleAllBtn" class="btn-red">◉ 全部显示</button>
+    <button onclick="toggleUpload()" class="btn-red">↑ 导入</button>
+    <button onclick="printThis()" class="btn-red">⊡ 打印</button>
+  </div>
+  <!-- 第三排：黑色 -->
+  <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+    <button onclick="openLibrary()" class="btn-normal">◇ 资料库</button>
+    <button onclick="toggleBackupPanel()" class="btn-normal">◈ 备份管理</button>
+  </div>
 </div>
 
 <div class="article-header" id="articleHeader"></div>
@@ -803,50 +845,85 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Microsoft YaHei","PingFang SC
 </div>
 
 <div class="listen-bar" id="listenBar">
-  <button onclick="listenPrev()" title="上一段">⏮</button>
-  <button id="lbPlay" onclick="listenToggle()">⏸</button>
-  <button onclick="listenNext()" title="下一段">⏭</button>
-  <span class="lb-progress" id="lbProgress">1 / 1</span>
-  <span class="lb-timer" id="lbTimer" style="display:none">--:--</span>
-  <button id="lbLoop" onclick="toggleLoop()">循环</button>
-  <label class="lb-rate">语速
-    <input type="range" id="lbRate" min="0.8" max="2" step="0.1" value="1.1">
-  </label>
-  <button class="lb-close" onclick="stopListen()" title="关闭">✕</button>
+  <span class="lb-progress" id="lbProgress">1/1</span>
+  <button onclick="listenPrev()" title="上一段">&lt;</button>
+  <button id="lbPlay" onclick="listenToggle()" style="font-weight:900; font-size:16px;">||</button>
+  <button onclick="listenNext()" title="下一段">&gt;</button>
+  <button id="lbLoop" onclick="toggleLoop()" title="循环" style="font-size:12px; font-weight:600;">循环</button>
+  <button class="lb-speed" id="lbSpeed" onclick="cycleSpeed()" title="倍速">1.0</button>
+  <button class="lb-close" onclick="stopListen()" title="关闭">×</button>
 </div>
 
-<div class="overlay" id="tocOverlay">
-  <button class="close" onclick="closeToc()">✕</button>
-  <div class="overlay-inner">
-    <!-- 新增的切换区域 -->
-    <div style="background:#f9f9f9; border:1px solid #eee; border-radius:4px; padding:12px; margin-bottom:16px; display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
-      <span style="font-size:13px; font-weight:600; color:#111;">📁 当前分类：</span>
-      <select id="tocCircleSelect" onchange="changeTocCircle(this.value)" style="padding:6px 10px; font-family:inherit; font-size:14px; border:1px solid #111; border-radius:3px; background:#fff; outline:none; cursor:pointer;"></select>
-      <select id="tocParaSelect" onchange="changeTocPara(this.value)" style="padding:6px 10px; font-family:inherit; font-size:14px; border:1px solid #111; border-radius:3px; background:#fff; outline:none; cursor:pointer;"></select>
-      <span style="margin-left:auto; font-size:12px; color:#999;">无需退出，直接切换</span>
+<!-- 听读控制面板 -->
+<div class="modal-overlay" id="listenPanel">
+  <div class="modal-box" style="max-width:400px">
+    <div class="modal-header"><span>听读控制</span><button onclick="toggleListenPanel()">✕</button></div>
+    <div class="modal-body">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:15px;">
+        <button class="timer-opt" onclick="toggleVoice()" id="voiceBtn" style="grid-column: span 2;">朗读开关：开</button>
+        <button class="timer-opt" onclick="startListen(); toggleListenPanel();">听整篇</button>
+        <button class="timer-opt" onclick="startListenOutline(); toggleListenPanel();">听脉络卡</button>
+        <button class="timer-opt" onclick="toggleLoop(); updateListenBtns();" id="loopBtnModal">循环本篇：关</button>
+        <button class="timer-opt" onclick="toggleSelectLoop(); updateListenBtns();" id="selLoopBtnModal">循环听选中：关</button>
+      </div>
+      
+      <div style="margin-bottom:15px; padding:10px; border:1px solid #eee; border-radius:4px;">
+        <div style="font-size:13px; font-weight:600; margin-bottom:8px;">选择声音</div>
+        <select id="voiceSelect" style="width:100%; margin-bottom:10px; padding:8px; border:1px solid #111; border-radius:3px; font-family:inherit;"></select>
+        <button onclick="tryVoice()" style="width:100%; padding:8px; border:1px solid #111; background:#fff; color:#111; cursor:pointer; border-radius:3px;">▶ 试听声音</button>
+      </div>
+      
+      <label class="rate-wrap" style="width:100%; justify-content:space-between; height:auto; padding:10px; display:flex; align-items:center; gap:10px; border:1px solid #ddd; border-radius:4px;">
+        <span style="font-size:13px; color:#666;">朗读语速</span>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <input type="range" id="rate" min="0.8" max="2" step="0.1" value="1.1">
+          <span id="rateVal">1.1</span>
+        </div>
+      </label>
     </div>
-
-    <div class="overlay-topbar">
-      <button onclick="addNewArticle()" style="border-color:#0a7a3a; color:#0a7a3a; font-weight:600;">➕ 添加考点</button>
-      <button onclick="selectAllToc()">全选</button>
-      <button onclick="selectNoneToc()">全不选</button>
-      <button onclick="selectInvertToc()">反选</button>
-      <span class="hint">勾选=参与"循环听选中"，↑↓=调顺序</span>
-    </div>
-    <div id="tocList"></div>
   </div>
 </div>
 
-<!-- ============================================================
-     资料库全屏视图
-     ============================================================ -->
+<div class="overlay" id="tocOverlay" onclick="if(event.target===this)closeToc()">
+  <div class="drawer">
+    <div class="drawer-header">
+      <h3 id="tocTitle">目录</h3>
+      <button class="close" onclick="closeToc()" style="position:static; border:none; font-size:20px; background:none;">×</button>
+    </div>
+    <div class="drawer-body">
+      <div style="display:flex; gap:8px; margin-bottom:15px; flex-wrap:wrap;">
+        <select id="tocCircleSelect" onchange="changeTocCircle(this.value)" style="flex:1; padding:8px; border:1px solid #ddd; border-radius:4px;"></select>
+        <select id="tocParaSelect" onchange="changeTocPara(this.value)" style="flex:1; padding:8px; border:1px solid #ddd; border-radius:4px;"></select>
+      </div>
+      <div class="overlay-topbar" style="margin-bottom:15px;">
+        <button onclick="addNewArticle()" style="color:#0a7a3a; border-color:#0a7a3a;">+ 添加</button>
+        <button onclick="selectAllToc()">全选</button>
+        <button onclick="selectNoneToc()">全不选</button>
+      </div>
+      <div id="tocList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 备份管理 -->
+<div class="modal-overlay" id="backupModal">
+  <div class="modal-box" style="max-width:350px">
+    <div class="modal-header"><span>备份管理</span><button onclick="toggleBackupPanel()">✕</button></div>
+    <div class="modal-body" style="display:flex; flex-direction:column; gap:15px;">
+      <button onclick="importAll(); toggleBackupPanel();" style="padding:12px; font-size:14px; border:1px solid #111; background:#fff; color:#111; border-radius:6px; cursor:pointer; font-weight:600;">导入备份 (合并数据)</button>
+      <button onclick="exportAll(); toggleBackupPanel();" style="padding:12px; font-size:14px; border:1px solid #800020; background:#800020; color:#fff; border-radius:6px; cursor:pointer; font-weight:600;">导出备份 (下载JSON)</button>
+    </div>
+  </div>
+</div>
+
+<!-- 资料库全屏视图 -->
 <div class="overlay" id="libraryOverlay">
   <button class="close" onclick="closeLibrary()">✕</button>
   <div class="overlay-inner" style="max-width: 900px;">
-    <h3 style="color:#0b5394;">📁 资料库（放你的大文件和笔记）</h3>
+    <h3 style="color:#0b5394;">资料库（放你的大文件和笔记）</h3>
     <div class="overlay-topbar">
-      <button onclick="addLibItem()" style="border-color:#0b5394; color:#0b5394; font-weight:600;">➕ 新建资料</button>
-      <button onclick="uploadLibFile()" style="border-color:#0b5394; color:#0b5394; font-weight:600;">📄 导入文件</button>
+      <button onclick="addLibItem()" style="border-color:#0b5394; color:#0b5394; font-weight:600;">+ 新建资料</button>
+      <button onclick="uploadLibFile()" style="border-color:#0b5394; color:#0b5394; font-weight:600;">导入文件</button>
       <span class="hint">左侧点击查看，右侧可编辑，支持表格和图片</span>
     </div>
     
@@ -858,8 +935,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Microsoft YaHei","PingFang SC
           <div id="libContentView" class="lib-content-view"></div>
           <textarea id="libContentEdit" class="lib-content-edit"></textarea>
           <div style="margin-top:12px; display:flex; gap:10px;">
-            <button class="edit-btn" onclick="toggleLibEdit()" id="libEditBtn" style="padding:6px 16px;">✏️ 编辑</button>
-            <button class="mark-btn" onclick="saveLibContent()" id="libSaveBtn" style="display:none; padding:6px 16px; background:#111; color:#fff;">💾 保存</button>
+            <button class="edit-btn" onclick="toggleLibEdit()" id="libEditBtn" style="padding:6px 16px;">编辑</button>
+            <button class="mark-btn" onclick="saveLibContent()" id="libSaveBtn" style="display:none; padding:6px 16px; background:#111; color:#fff;">保存</button>
           </div>
         </div>
         <div id="libEmpty" style="text-align:center; padding:60px 0; color:#999; font-size:14px;">
@@ -872,7 +949,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Microsoft YaHei","PingFang SC
 
 <div class="upload-panel" id="uploadPanel">
   <div class="hint">
-    <b>流程</b>：① 选文件/粘贴文本 → ② 点「🔍 预览挖空效果」 → ③ 无误后点「解析导入」。<br>
+    <b>流程</b>：① 选文件/粘贴文本 → ② 点「预览挖空效果」 → ③ 无误后点「解析导入」。<br>
     <b>挖空规则</b>：<b>S-A / S-B / S-C 模板里的轮换句式自动保护（不挖）</b>，包括「第一，第二，」等序号词；其余所有文字全部自动挖成〔〕（黑）。红色【】需手动在「编辑当前题型」里加。<br>
     <b>分段规则</b>：按模板锚点强制拆段（「从机制看」「因此，必须为」「可见，」「之所以形成结构性张力」「若要实现」「这意味着，」「需要指出的是」「回望…的历史功能归位于」等），PDF 乱分段也能救回来。<br>
     <b>格式</b>：解析模式支持 <b>PDF / DOCX / TXT / MD</b>，按「论述：xxx」标题分篇。
@@ -900,7 +977,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Microsoft YaHei","PingFang SC
   <textarea id="autoBlankRules" style="height: 80px; margin-bottom: 10px;" placeholder="每行一条前缀，例如：&#10;关键在于&#10;必须设限"></textarea>
   
   <div style="margin-bottom: 16px;">
-    <button id="previewBtn" onclick="previewAutoBlank()" style="background:#fff;color:#0b5394;border-color:#0b5394; padding: 6px 14px; font-size: 12.5px; cursor: pointer; border-radius: 2px; font-family: inherit;">🔍 预览挖空效果</button>
+    <button id="previewBtn" onclick="previewAutoBlank()" style="background:#fff;color:#0b5394;border-color:#0b5394; padding: 6px 14px; font-size: 12.5px; cursor: pointer; border-radius: 2px; font-family: inherit;">预览挖空效果</button>
   </div>
   <div id="previewArea"></div>
   
@@ -943,9 +1020,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Microsoft YaHei","PingFang SC
   <div class="modal-box" style="max-width:700px">
     <div class="modal-header"><span>编辑脉络卡</span><button onclick="closeOutlineEditor()">✕</button></div>
     <div class="modal-body">
-      <!-- 新增的批量解析区 -->
       <div style="background:#f4f8fc; border:1px solid #0b5394; padding:10px 14px; border-radius:4px; margin-bottom:16px;">
-        <div style="font-size:12.5px; color:#0b5394; font-weight:600; margin-bottom:6px;">⚡️ 智能批量解析（将你的“纯背诵版”文本粘贴到下面）</div>
+        <div style="font-size:12.5px; color:#0b5394; font-weight:600; margin-bottom:6px;">智能批量解析（将你的“纯背诵版”文本粘贴到下面）</div>
         <textarea id="outlineBatchInput" style="width:100%; height:100px; font-size:12px; line-height:1.5; padding:8px; border:1px solid #ccc; border-radius:3px; margin-bottom:8px; resize:vertical;" placeholder="【题干】新闻敏感构成与素养&#10;【第一段·开篇】&#10;核心判断：新闻敏感不是天生嗅觉..."></textarea>
         <button onclick="parseOutlineBatch()" style="padding:6px 12px; background:#0b5394; color:#fff; border:none; border-radius:3px; font-size:12px; cursor:pointer;">一键解析并覆盖下方</button>
       </div>
@@ -1043,7 +1119,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Microsoft YaHei","PingFang SC
   </div>
 </div>
 
-<!-- 内部通用弹窗（替代被屏蔽的 alert/prompt/confirm） -->
+<!-- 内部通用弹窗 -->
 <div class="modal-overlay" id="uiModal">
   <div class="modal-box">
     <div class="modal-header"><span id="uiTitle">提示</span><button onclick="closeUiModal()">✕</button></div>
@@ -1058,9 +1134,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Microsoft YaHei","PingFang SC
   </div>
 </div>
 
-<!-- ============================================================
-     概念地图全屏视图
-     ============================================================ -->
+<!-- 概念地图全屏视图 -->
 <div id="map-view">
   <button class="map-close" onclick="closeMap()">✕ 返回背题</button>
   
@@ -1156,7 +1230,27 @@ document.addEventListener('keydown', function(e){
 });
 
 // ============================================================
-// 录音存储
+// 听读控制面板开关
+// ============================================================
+function toggleListenPanel() {
+  const p = document.getElementById('listenPanel');
+  p.classList.toggle('show');
+  if (p.classList.contains('show')) updateListenBtns();
+}
+function updateListenBtns() {
+  const vBtn = document.getElementById('voiceBtn');
+  if(vBtn) vBtn.textContent = voiceOn ? '朗读开关：开' : '朗读开关：关';
+  const lBtn = document.getElementById('loopBtnModal');
+  if(lBtn) lBtn.textContent = listenLoop ? '循环本篇：开' : '循环本篇：关';
+  const sBtn = document.getElementById('selLoopBtnModal');
+  if(sBtn) sBtn.textContent = selectLoop ? '循环听选中：开' : '循环听选中：关';
+}
+function toggleBackupPanel() {
+  document.getElementById('backupModal').classList.toggle('show');
+}
+
+// ============================================================
+// 录音存储（底层保留，UI 已移除）
 // ============================================================
 let audioDB=null;let recKeys=new Set();
 function openAudioDB(){return new Promise(res=>{const r=indexedDB.open('kf_audio_v1',1);r.onupgradeneeded=e=>{const d=e.target.result;if(!d.objectStoreNames.contains('rec'))d.createObjectStore('rec')};r.onsuccess=e=>{audioDB=e.target.result;res()};r.onerror=()=>res()})}
@@ -1172,24 +1266,80 @@ function stopRec(){if(mediaRecorder&&mediaRecorder.state==='recording')mediaReco
 async function playRec(key,el){const blob=await dbGet(key);if(!blob)return false;if(audioPlayer){audioPlayer.pause();audioPlayer=null}const url=URL.createObjectURL(blob);audioPlayer=new Audio(url);if(el){audioPlayer.onplay=()=>el.classList.add('played');audioPlayer.onended=()=>{el.classList.remove('played');URL.revokeObjectURL(url)}}else{audioPlayer.onended=()=>URL.revokeObjectURL(url)}audioPlayer.play();return true}
 function markRecorded(){document.querySelectorAll('#out .blank').forEach(b=>{if(recKeys.has(b.dataset.key))b.classList.add('recorded')})}
 let recMode=false;
-function toggleRecMode(){recMode=!recMode;const btn=document.getElementById('recBtn');btn.textContent=recMode?'录音模式 开':'录音模式';btn.classList.toggle('rec-on',recMode);document.getElementById('recHint').classList.toggle('show',recMode);if(canSpeak)speechSynthesis.cancel();renderArticle()}
+function toggleRecMode(){recMode=!recMode;if(canSpeak)speechSynthesis.cancel();renderArticle()}
 
 // ============================================================
 // TTS
 // ============================================================
 let voiceOn=true,zhVoices=[],pickedVoice=null;
 const canSpeak=!!window.speechSynthesis;
-const MAINLAND_NAMES = ['Ting-Ting','Tingting','婷婷','Mei-Jia','Meijia','美佳','Sinji'];
-function isMainland(v){const lang=v.lang||'',name=v.name||'';if(/^zh[-_]CN$/i.test(lang))return true;if(MAINLAND_NAMES.some(n=>name.includes(n))&&!/HK|TW|Yue|Cantonese|Hong|Taiwan/i.test(lang))return true;return false}
-function loadVoices(){if(!canSpeak)return;const all=speechSynthesis.getVoices();if(!all.length)return;let zh=all.filter(isMainland);zh.sort((a,b)=>{const ai=MAINLAND_NAMES.findIndex(p=>(a.name||'').includes(p));const bi=MAINLAND_NAMES.findIndex(p=>(b.name||'').includes(p));if(ai>=0&&bi<0)return -1;if(ai<0&&bi>=0)return 1;if(ai>=0&&bi>=0)return ai-bi;return 0});zhVoices=zh;const sel=document.getElementById('voiceSelect');if(!zhVoices.length){sel.innerHTML='<option>未找到大陆普通话声音</option>';document.getElementById('voiceNote').textContent='建议用 iOS 朗读屏幕（双指下滑）听月/黎澈';return}sel.innerHTML=zhVoices.map((v,i)=>`<option value="${i}">${v.name}</option>`).join('');const saved=localStorage.getItem('kf_voice_idx');if(saved&&zhVoices[+saved]){sel.value=saved;pickedVoice=zhVoices[+saved]}else{sel.value=0;pickedVoice=zhVoices[0]}document.getElementById('voiceNote').textContent=`共 ${zhVoices.length} 个大陆声音`}
+
+function isChineseVoice(v) {
+  const lang = (v.lang || '').toLowerCase();
+  const name = (v.name || '').toLowerCase();
+  return lang.includes('zh') || 
+         /婷|月|云|黎|牧|莉|莎|珊|陶|田|语舒|美嘉|yun|yue|siri|ting|eloquence/i.test(name);
+}
+
+function loadVoices(){
+  if(!canSpeak)return;
+  const all=speechSynthesis.getVoices();
+  if(!all.length)return;
+  
+  let zh = all.filter(isChineseVoice); 
+  
+  const priorityNames = ['月', 'Yue', 'Yun', 'Siri', '黎澈', '语舒', '婷婷'];
+  zh.sort((a,b)=>{
+    const aName = a.name || '';
+    const bName = b.name || '';
+    let aPri = 999, bPri = 999;
+    priorityNames.forEach((p, idx) => {
+      if (aName.includes(p)) aPri = Math.min(aPri, idx);
+      if (bName.includes(p)) bPri = Math.min(bPri, idx);
+    });
+    if (aPri !== bPri) return aPri - bPri;
+    return aName.localeCompare(bName);
+  });
+
+  zhVoices = zh;
+  const sel=document.getElementById('voiceSelect');
+  if(!sel)return;
+  if(!zhVoices.length){
+    sel.innerHTML='<option>未找到中文声音</option>';
+    const vn = document.getElementById('voiceNote');
+    if(vn)vn.textContent='请在系统设置中下载中文语音';
+    return;
+  }
+  sel.innerHTML=zhVoices.map((v,i)=>`<option value="${i}">${v.name}</option>`).join('');
+  
+  const saved=localStorage.getItem('kf_voice_idx');
+  if(saved&&zhVoices[+saved]){
+    sel.value=saved;
+    pickedVoice=zhVoices[+saved];
+  }else{
+    sel.value=0;
+    pickedVoice=zhVoices[0];
+  }
+  const vn = document.getElementById('voiceNote');
+  if(vn)vn.textContent=`共 ${zhVoices.length} 个声音`;
+}
+
 if(canSpeak){loadVoices();speechSynthesis.onvoiceschanged=loadVoices;setTimeout(loadVoices,400);setTimeout(loadVoices,1200);setTimeout(loadVoices,2500);setTimeout(loadVoices,4000)}
-document.getElementById('voiceSelect').addEventListener('change',function(){const i=+this.value;pickedVoice=zhVoices[i]||null;localStorage.setItem('kf_voice_idx',i);tryVoice()});
+const _voiceSelect = document.getElementById('voiceSelect');
+if(_voiceSelect) _voiceSelect.addEventListener('change',function(){const i=+this.value;pickedVoice=zhVoices[i]||null;localStorage.setItem('kf_voice_idx',i);tryVoice()});
 function tryVoice(){speak('情感动员不是外在噪音。',null)}
-function speak(text,el){if(!voiceOn||!text||!canSpeak)return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang=(pickedVoice&&pickedVoice.lang)||'zh-CN';u.rate=parseFloat(document.getElementById('rate').value)||1.1;u.pitch=1;if(pickedVoice)u.voice=pickedVoice;if(el){u.onstart=()=>el.classList.add('speaking');u.onend=()=>el.classList.remove('speaking');u.onerror=()=>el.classList.remove('speaking')}speechSynthesis.speak(u)}
-function toggleVoice(){voiceOn=!voiceOn;const b=document.getElementById('voiceBtn');b.textContent=voiceOn?'朗读 开':'朗读 关';b.classList.toggle('off',!voiceOn);if(!voiceOn&&canSpeak)speechSynthesis.cancel()}
-function toggleVoiceRow(){document.getElementById('voiceRow').classList.toggle('show')}
-document.getElementById('rate').addEventListener('input',function(){document.getElementById('rateVal').textContent=parseFloat(this.value).toFixed(1);document.getElementById('lbRate').value=this.value});
-document.getElementById('lbRate').addEventListener('input',function(){document.getElementById('rate').value=this.value;document.getElementById('rateVal').textContent=parseFloat(this.value).toFixed(1)});
+function speak(text,el){if(!voiceOn||!text||!canSpeak)return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang=(pickedVoice&&pickedVoice.lang)||'zh-CN';u.rate=parseFloat(document.getElementById('rate').value)||1.1;u.pitch=1;if(pickedVoice)u.voice=pickedVoice;if(el){u.onstart=()=>el.classList.add('speaking');u.onend=()=>el.classList.remove('speaking');u.onerror=()=>el.classList.remove('speaking')}if (speechSynthesis.paused) speechSynthesis.resume();speechSynthesis.speak(u)}
+function toggleVoice(){
+  voiceOn=!voiceOn;
+  const b=document.getElementById('voiceBtn');
+  if(b)b.textContent=voiceOn?'朗读开关：开':'朗读开关：关';
+  if(!voiceOn&&canSpeak)speechSynthesis.cancel();
+}
+function toggleVoiceRow(){const v=document.getElementById('voiceRow');if(v)v.classList.toggle('show')}
+const _rate = document.getElementById('rate');
+if(_rate) _rate.addEventListener('input',function(){const rv=document.getElementById('rateVal');if(rv)rv.textContent=parseFloat(this.value).toFixed(1);const lb=document.getElementById('lbRate');if(lb)lb.value=this.value});
+const _lbRate = document.getElementById('lbRate');
+if(_lbRate) _lbRate.addEventListener('input',function(){const r=document.getElementById('rate');if(r)r.value=this.value;const rv=document.getElementById('rateVal');if(rv)rv.textContent=parseFloat(this.value).toFixed(1)});
 
 // ============================================================
 // 听整篇 & 听脉络卡
@@ -1199,12 +1349,32 @@ let selectLoop=false;
 let speakSession=0;
 let isListeningOutline = false;
 
-function toggleLoop(){listenLoop=!listenLoop;const tb=document.getElementById('loopBtn');const lb=document.getElementById('lbLoop');tb.textContent=listenLoop?'循环 开':'循环本篇';tb.classList.toggle('listen-on',listenLoop);if(lb)lb.classList.toggle('on',listenLoop)}
+let currentSpeed = 1.0;
+const speeds = [1.0, 1.2, 1.5, 1.8, 0.8];
+function cycleSpeed() {
+  let idx = speeds.indexOf(currentSpeed);
+  idx = (idx + 1) % speeds.length;
+  currentSpeed = speeds[idx];
+  const speedEl = document.getElementById('lbSpeed');
+  if(speedEl) speedEl.textContent = currentSpeed.toFixed(1);
+  const rateEl = document.getElementById('rate');
+  if(rateEl) rateEl.value = currentSpeed;
+  const rateValEl = document.getElementById('rateVal');
+  if(rateValEl) rateValEl.textContent = currentSpeed.toFixed(1);
+  if(listenPlaying && listenIdx >= 0 && !isListeningOutline) {
+    speakPara(listenIdx);
+  }
+}
+
+function toggleLoop(){
+  listenLoop=!listenLoop;
+  const lb=document.getElementById('lbLoop');
+  if(lb)lb.classList.toggle('on',listenLoop);
+  updateListenBtns();
+}
 function toggleSelectLoop(){
   selectLoop=!selectLoop;
-  const b=document.getElementById('selLoopBtn');
-  b.textContent=selectLoop?'听选中 开':'循环听选中';
-  b.classList.toggle('listen-on',selectLoop);
+  updateListenBtns();
   if(selectLoop && !listenPlaying){
     if(isListeningOutline) startListenOutline(); else startListen();
   }
@@ -1252,30 +1422,47 @@ function startListen(){
   if(!listenParas.length)return;
   listenPlaying=true; listenIdx=-1; speakSession=0;
   document.getElementById('listenBar').classList.add('show');
-  document.getElementById('listenBtn').classList.add('listen-on');
-  document.getElementById('listenBtn').textContent='停止';
-  document.getElementById('listenOutlineBtn').classList.remove('listen-on');
-  document.getElementById('listenOutlineBtn').textContent='听脉络卡';
   document.getElementById('lbLoop').classList.toggle('on',listenLoop);
   speakTitle();
 }
 
 function startListenOutline(){
   if(!canSpeak){uiAlert('这个浏览器不支持语音合成');return}
+  
+  // 如果当前不在论述题型，强制切换过去，否则面板隐藏没法滚动
+  if (currentNoteType !== '论述') {
+    currentNoteType = '论述';
+    renderArticle(true);
+  }
+
   const list = DB[curCircle][curPara] || [];
   const art = list[curPage];
   if(!art || !art.outline || !art.outline.length){
     uiAlert('本篇还没有配置脉络卡，无法朗读。'); return;
   }
   
+  const card = document.getElementById('outlineCard');
+  if(card) {
+    card.style.display = 'block';
+    if(!card.classList.contains('open')) {
+        card.classList.add('open');
+        document.getElementById('outlineToggle').textContent='收起 ▲';
+    }
+  }
+
   listenParas = [];
-  art.outline.forEach(para => {
+  const paraDoms = document.querySelectorAll('.outline-para');
+  
+  art.outline.forEach((para, pIdx) => {
     let text = `${para.label}。`;
     if(para.tag) text += `${para.tag}。`;
-    para.items.forEach(it => {
-      text += `${it.text}。`;
+    para.items.forEach(it => { text += `${it.text}。`; });
+    
+    listenParas.push({ 
+      textContent: text, 
+      dom: paraDoms[pIdx] || null,
+      paraIndex: pIdx
     });
-    listenParas.push({ textContent: text });
   });
   
   speechSynthesis.cancel();
@@ -1284,10 +1471,10 @@ function startListenOutline(){
   
   listenPlaying=true; listenIdx=-1; speakSession=0;
   document.getElementById('listenBar').classList.add('show');
-  document.getElementById('listenOutlineBtn').classList.add('listen-on');
-  document.getElementById('listenOutlineBtn').textContent='停止';
-  document.getElementById('listenBtn').classList.remove('listen-on');
-  document.getElementById('listenBtn').textContent='听整篇';
+  const loBtn = document.getElementById('listenOutlineBtn');
+  if(loBtn){ loBtn.classList.add('listen-on'); loBtn.textContent='停止'; }
+  const lBtn = document.getElementById('listenBtn');
+  if(lBtn){ lBtn.classList.remove('listen-on'); lBtn.textContent='听整篇'; }
   document.getElementById('lbLoop').classList.toggle('on',listenLoop);
   
   speakTitle();
@@ -1308,11 +1495,10 @@ function speakTitle(){
   
   const u=new SpeechSynthesisUtterance(art.title + (isListeningOutline ? '，脉络卡。' : ''));
   u.lang=(pickedVoice&&pickedVoice.lang)||'zh-CN';
-  u.rate=parseFloat(document.getElementById('rate').value)||1.1;
+  u.rate=currentSpeed;
   u.pitch=1;
   if(pickedVoice)u.voice=pickedVoice;
   
-  // 加上这句魔法指令，解决 iOS PWA 卡在暂停状态的问题
   if (speechSynthesis.paused) speechSynthesis.resume();
   
   u.onend=()=>{
@@ -1353,6 +1539,26 @@ function speakPara(i){
     document.querySelectorAll('#out p').forEach(p=>p.classList.remove('listening'));
     const pEl = document.querySelectorAll('#out p')[i];
     if(pEl){ pEl.classList.add('listening'); pEl.scrollIntoView({block:'center',behavior:'smooth'}); }
+  } else {
+    // 清除旧高亮
+    document.querySelectorAll('.outline-para').forEach(el => {
+       el.style.background = 'transparent';
+    });
+    
+    const pIdx = listenParas[i].paraIndex; 
+    // 通过 ID 直接寻找目标
+    const targetEl = document.getElementById(`outline-para-${pIdx}`);
+    
+    if(targetEl){
+       targetEl.style.background = '#fdf0f2'; 
+       
+       // 使用强力物理滚动，禁用所有平滑动画
+       setTimeout(() => {
+         const yOffset = -100; // 距离顶部留白
+         const y = targetEl.getBoundingClientRect().top + window.pageYOffset + yOffset;
+         window.scrollTo({top: y, behavior: 'auto'}); 
+       }, 100);
+    }
   }
   
   updateListenBar();
@@ -1363,11 +1569,10 @@ function speakPara(i){
   const currentSession=++speakSession;
   const u=new SpeechSynthesisUtterance(text);
   u.lang=(pickedVoice&&pickedVoice.lang)||'zh-CN';
-  u.rate=parseFloat(document.getElementById('rate').value)||1.1;
+  u.rate=currentSpeed;
   u.pitch=1;
   if(pickedVoice)u.voice=pickedVoice;
   
-  // 同上，解决 PWA 暂停状态
   if (speechSynthesis.paused) speechSynthesis.resume();
   
   u.onend=()=>{
@@ -1409,11 +1614,12 @@ function finishArticle(){
        const newArt = DB[curCircle][curPara][curPage];
        listenParas = [];
        if(newArt && newArt.outline && newArt.outline.length > 0){
-           newArt.outline.forEach(para => {
+           const paraDoms = document.querySelectorAll('.outline-para');
+           newArt.outline.forEach((para, pIdx) => {
               let text = `${para.label}。`;
               if(para.tag) text += `${para.tag}。`;
               para.items.forEach(it => { text += `${it.text}。`; });
-              listenParas.push({ textContent: text });
+              listenParas.push({ textContent: text, dom: paraDoms[pIdx] || null, paraIndex: pIdx });
            });
            validContent = listenParas.length > 0;
        }
@@ -1441,15 +1647,9 @@ function stopListen(){
   if(canSpeak)speechSynthesis.cancel();
   document.querySelectorAll('#out p').forEach(p=>p.classList.remove('listening'));
   document.querySelectorAll('.article-title').forEach(t=>t.classList.remove('listening'));
-  document.getElementById('listenBar').classList.remove('show');
-  
-  const b1=document.getElementById('listenBtn');
-  b1.classList.remove('listen-on');
-  b1.textContent='听整篇';
-  
-  const b2=document.getElementById('listenOutlineBtn');
-  b2.classList.remove('listen-on');
-  b2.textContent='听脉络卡';
+  document.querySelectorAll('.outline-para').forEach(p=>p.style.background = 'transparent');
+  const lb = document.getElementById('listenBar');
+  if(lb) lb.classList.remove('show');
 }
 
 function listenToggle(){
@@ -1459,17 +1659,23 @@ function listenToggle(){
     if(canSpeak)speechSynthesis.cancel();
     document.querySelectorAll('#out p').forEach(p=>p.classList.remove('listening'));
     document.querySelectorAll('.article-title').forEach(t=>t.classList.remove('listening'));
-    document.getElementById('lbPlay').textContent='▶';
+    document.getElementById('lbPlay').textContent='||';
   }else{
     listenPlaying=true;
-    document.getElementById('lbPlay').textContent='⏸';
+    document.getElementById('lbPlay').textContent='||';
     if(listenIdx<0)speakTitle();
     else speakPara(listenIdx);
   }
 }
 function listenPrev(){if(!listenPlaying)return;if(listenIdx<=0){speakTitle();return}speakPara(listenIdx-1)}
 function listenNext(){if(!listenPlaying)return;if(listenIdx<0){speakPara(0);return}if(listenIdx<listenParas.length-1)speakPara(listenIdx+1);else finishArticle()}
-function updateListenBar(){const prog=document.getElementById('lbProgress');if(listenIdx<0)prog.textContent='题目';else prog.textContent=`${listenIdx+1} / ${listenParas.length}`;document.getElementById('lbPlay').textContent=listenPlaying?'⏸':'▶'}
+function updateListenBar(){
+  const prog=document.getElementById('lbProgress');
+  if(listenIdx<0)prog.textContent='题目';
+  else prog.textContent=`${listenIdx+1}/${listenParas.length}`;
+  const playBtn=document.getElementById('lbPlay');
+  if(playBtn)playBtn.textContent='||';
+}
 
 // ============================================================
 // 定时关闭
@@ -1566,11 +1772,14 @@ function lastReviewLabel(dateStr){
   if(d <= 3) return {text:`${d} 天前背过 · ${dateCN}`, cls:''};
   return {text:`${d} 天前背过 · ${dateCN}`, cls:'stale'};
 }
-function markAsReviewed(){
+function markAsReviewed(targetType){
   const list = DB[curCircle][curPara]||[];
   if(!list[curPage]) return;
   if(!list[curPage].reviewDates) list[curPage].reviewDates = {};
-  list[curPage].reviewDates[currentNoteType] = todayStr();
+  
+  let typeToMark = targetType || currentNoteType;
+  list[curPage].reviewDates[typeToMark] = todayStr();
+  
   saveDB();
   renderArticle();
   if(document.getElementById('reviewModal').classList.contains('show')) renderReviewList();
@@ -1665,11 +1874,11 @@ const LIB_5_CIRCLES = `考点 | 大类 | 近5年 | 全周期 | 满足条件 | �
 function createEmptyArticle(title) {
   return {
     title: title,
-    pref: '', // 新增：考场偏好
+    pref: '',
     selected: true,
     outline: [],
     notes: { '名词解释': '', '简答': '', '论述': '' },
-    reviewDates: { '名词解释': null, '简答': null, '论述': null }
+    reviewDates: { '名词解释': null, '简答': null, '论述': null, '脉络卡': null }
   };
 }
 
@@ -1697,7 +1906,7 @@ function defaultDB(){
 
 let DB;
 try{
-  let s=localStorage.getItem('kf_db_v49'); // 版本升级
+  let s=localStorage.getItem('kf_db_v49');
   if(s) DB = JSON.parse(s);
   else DB = defaultDB();
 }catch(e){DB=defaultDB()}
@@ -1731,7 +1940,8 @@ function ensureDB(){
         if(a.selected === undefined) a.selected = true;
         if(a.pref === undefined) a.pref = '';
         if(!a.notes) a.notes = { '名词解释': '', '简答': '', '论述': '' };
-        if(!a.reviewDates) a.reviewDates = { '名词解释': null, '简答': null, '论述': null };
+        if(!a.reviewDates) a.reviewDates = { '名词解释': null, '简答': null, '论述': null, '脉络卡': null };
+        if(a.reviewDates['脉络卡'] === undefined) a.reviewDates['脉络卡'] = null;
       });
     })
   })
@@ -1753,15 +1963,12 @@ function saveDB(){
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 
 // ============================================================
-// 自动挖空引擎：轮换句式白名单保护 + 其余全部挖空
+// 自动挖空引擎
 // ============================================================
 
 const ROTATION_WHITELIST = [
-  // ===== S-A 开篇句式 =====
   '常被误读为','表面上是','实质上是','问题不在于','简化为','掩盖了',
   '与其说','不如说','不是','而是','而在于',
-
-  // ===== S-A 第二段骨架起手词 =====
   '从机制看','从本体看','从本质看','从演进看','从层次看','从前提看','从预设看',
   '沿三条路径展开','为例',
   '的简单叠加','的绝对统摄——前者表现为','后者实质上',
@@ -1769,22 +1976,14 @@ const ROTATION_WHITELIST = [
   '首先需要清算一个前提','这一前提一旦厘清','便沿三条路径展开',
   '第一，','第二，','第三，','第四，',
   '第一层，','第二层，','第三层，',
-
-  // ===== S-A 拔高句 =====
   '更值得警惕的是','更关键的是','代价之上','更进一步','深层危机在于',
-
-  // ===== S-A 事实判断 =====
   '然而，这种机制在极致推演下，反而消解了其存在的前提',
   '这一机制同时隐含一个悖论',
   '的风险并不止于','而是向','外溢',
   '这一机制一旦固化','便从','转向','形成结构性锁定',
-
-  // ===== S-A 价值判断 =====
   '若抽离马克思主义新闻观与人民立场','若抽离公共价值与专业立场',
   '若抽离新闻专业主义与公共价值','若抽离公共价值与社会公平立场',
   '论证链条即断裂','只会沦为','只会从','退化为',
-
-  // ===== S-A 第三段 =====
   '因此，必须为','划定边界','只能','不能',
   '因此，必须追问','究竟是','还是','这一追问要求我们为',
   '因此，必须预判','可能带来的三重风险',
@@ -1793,16 +1992,12 @@ const ROTATION_WHITELIST = [
   '全过程',
   '方向有四','路径有三','这一目标倒推四条路径','应对上述风险，需三条路径',
   '唯有回到',
-
-  // ===== S-A 结尾 =====
   '唯有把','才能','而非',
   '的治理/重构，不在于','而在于','唯有如此','才不至于',
   '作为','才能避免',
   '正是在这个意义上','不在于','需要把','扩展至',
   '如果说','揭示了','那么','则要求我们',
   '可见','的本质绝非','若不能将','终将沦为',
-
-  // ===== S-B 开篇 =====
   '不可否认','层面发挥积极作用，但这套运行机制内部潜藏结构性矛盾',
   '的产物','一方面释放了','的红利','但更关键的是',
   '其内在机制孕育了','的结构性矛盾',
@@ -1811,15 +2006,11 @@ const ROTATION_WHITELIST = [
   '的普及','在释放红利的同时','也逐步暴露出',
   '人们期待','但实践落地中暴露出结构性挤压',
   '不仅未能兑现','反而被','持续侵蚀',
-
-  // ===== S-B 第二段骨架 =====
   '为核心','第一重张力在于','第二重张力在于',
   '的张力沿','逐层递进',
   '的困境，源于两重错位','第一重是','第二重是',
   '之所以形成结构性张力','并非因为','而是因为','锁定',
   '的张力，可通过两组对照呈现','一方面','另一方面','两组对照揭示同一矛盾',
-
-  // ===== S-B 机制分析句 =====
   '究其根本','之间存在结构性矛盾','治理只能依赖','的脆弱平衡',
   '这一困境的根源，在于','逻辑强行置换了',
   '须经由','方能兑现',
@@ -1828,22 +2019,16 @@ const ROTATION_WHITELIST = [
   '的内生要求','二者难以自动兼容',
   '吊诡之处在于','并未消失，而是从','转移到',
   '制度更新滞后于',
-
-  // ===== S-B 张力收束 =====
   '这一机制在提升','的同时，也以','为代价',
   '这一机制并非单维运作，而是呈现出双向透支的特征',
   '在相互强化中同时被消耗',
   '这一机制的隐蔽代价在于',
   '更值得追问的是','虽未直接显现为冲突，却已在','层面形成持续张力',
-
-  // ===== S-B 出路开启 =====
   '出路在于以马克思主义新闻观为统领，以人民为中心',
   '出路在于以人民为中心，把马克思主义新闻观内化为','的制度安排，而非外挂口号',
   '出路在于以公共性为锚重构',
   '出路在于以专业价值与公共性为锚重构',
   '出路在于以制度平衡为目标重构','之间建立可持续规则',
-
-  // ===== S-B 第三段 =====
   '制度层面，需','平台层面，应','公众层面，需',
   '三条路径并行推进','四条路径协同推进','需从目标倒推四条路径',
   '必须以马克思主义新闻观为统领，以人民为中心',
@@ -1857,41 +2042,29 @@ const ROTATION_WHITELIST = [
   '唯有以','重构','才能使','避免',
   '为锚','才能','而非',
   '必须从','转向','真正',
-
-  // ===== S-B 结尾 =====
   '这意味着','最终取决于',
   '持续挤压','唯有把','嵌入','才能','而非',
   '的真正意义，恰恰在于它揭示了','这关乎',
   '的出路，不能止于','的优化，必须依靠','的制度重构，以','为绝对底线',
   '已不再只是','的前提',
   '的可持续性，不取决于','的技术设计，而取决于','之间划定清晰底线',
-
-  // ===== S-C 开篇 =====
   '的兴起，不仅是一次','更是一场','的整体重组',
   '的演进始终受制于','之间的历史条件性制约关系',
   '的历史功能，应置于','的延长线上理解','承担起',
   '经历了','的整体转型',
   '既是','的产物，又反过来重塑了',
   '其历史遗产凝结为','的制度沉淀，并由此延续为',
-
-  // ===== S-C 主体段首 =====
   '推入','阶段','此阶段的核心问题落脚于','其展开由',
   '真正的转折出现在','之后，',
   '如果说','解决的是','那么','要解决的是',
   '的选择应置于','条件下理解','这一选择使','的形态',
-
-  // ===== S-C 史实功能 =====
   '其历史功能在于','这一实践在','维度上奠定了',
   '放回','语境中，','的功能是',
   '实现了','的功能转换',
-
-  // ===== S-C 设限 =====
   '必须设限','的有效性依赖',
   '需要指出的是，','的边界由','即难以持续',
   '历史地看，','的限度在于','其作用范围取决于',
   '这一实践的限度由','框定','若抽离','其历史效力便会大打折扣',
-
-  // ===== S-C 结尾 =====
   '的历史功能归位于','的结构位置',
   '这一判断在','中反复显现','前者','后者',
   '留下的制度延续是',
@@ -1903,8 +2076,6 @@ const ROTATION_WHITELIST = [
   '站在','回望','作为一次','同时构成一场',
   '应使','承载',
   '这既是对首段判断的历史回应，也是','的必然要求',
-
-  // ===== 序号类模板词（S-A / S-B / S-C 通用）=====
   '第一，','第二，','第三，','第四，','第五，','第六，','第七，','第八，',
   '第一、','第二、','第三、','第四、','第五、',
   '其一，','其二，','其三，','其四，',
@@ -1922,32 +2093,18 @@ const ROTATION_WHITELIST = [
 
 const WL_SORTED = [...ROTATION_WHITELIST].sort((a, b) => b.length - a.length);
 
-// ============================================================
-// 智能分段：靠模板锚点词强制拆段（PDF 乱分段专用）
-// ============================================================
 function smartSegment(text) {
   let t = String(text || '').replace(/\r/g, '');
-
-  // 1. 段内单换行先合并（保留空行作为段落分隔）
   t = t.replace(/([^\n])\n(?!\n)/g, '$1');
 
-  // 2. 段首锚点（新段开始的地方），拆段前提：锚点前必须是。！？
   const anchors = [
-    // S-A 第二段起手
     '从机制看','从本体看','从本质看','从演进看','从层次看','从前提看','从预设看',
-    // S-A 第三段起手
     '因此，必须为','因此，必须追问','因此，必须预判',
-    // S-A 结尾
     '可见，',
-    // S-B 第二段起手
     '之所以形成结构性张力','的张力沿','的困境，源于两重错位','的张力，可通过两组对照呈现',
-    // S-B 第三段起手
     '若要实现','三条路径并行推进','四条路径协同推进','制度层面，需',
-    // S-B 结尾
     '这意味着，',
-    // S-C 转折
     '真正的转折出现在',
-    // S-C 设限段起手
     '需要指出的是','历史地看'
   ];
 
@@ -1960,7 +2117,6 @@ function smartSegment(text) {
       const regex = new RegExp('([。！？])[ \\t　]*(' + escaped + ')', 'g');
       p = p.replace(regex, '$1\n\n$2');
     });
-    // S-C 结尾：句号 + 回望XXX的历史功能归位于
     p = p.replace(
       /([。！？])(回望[^。！？\n]{0,30}?的历史功能归位于)/g,
       '$1\n\n$2'
@@ -1973,7 +2129,6 @@ function smartSegment(text) {
   return t.trim();
 }
 
-// 把一段普通文字按分句切分，每段非标点非空白的连续字符用〔〕挖空
 function blankify(seg) {
   if (!seg) return seg;
   return seg.replace(/[^，。；！？、\s\u0001\u0002]+/g, (match) => {
@@ -1982,9 +2137,6 @@ function blankify(seg) {
   });
 }
 
-// ============================================================
-// 主挖空函数：保护轮换句式，其余全挖
-// ============================================================
 function applyAutoBlank(text, rulesText) {
   if (!text) return text;
 
@@ -1997,11 +2149,9 @@ function applyAutoBlank(text, rulesText) {
     return '\u0001P' + idx + '\u0002';
   };
 
-  // 1. 保护用户已有的【】〔〕标记
   result = result.replace(/【[^】]+】/g, m => protect(m));
   result = result.replace(/〔[^〕]+〕/g, m => protect(m));
 
-  // 2. 合并白名单：内置轮换句式 + 自定义前缀词
   let extraRules = [];
   if (rulesText && rulesText.trim()) {
     extraRules = rulesText.split('\n').map(s => s.trim()).filter(Boolean);
@@ -2010,7 +2160,6 @@ function applyAutoBlank(text, rulesText) {
     .filter(s => s && s.length > 0)
     .sort((a, b) => b.length - a.length);
 
-  // 3. 长词优先，逐个保护
   const seen = new Set();
   allWhitelist.forEach(item => {
     if (seen.has(item)) return;
@@ -2021,14 +2170,12 @@ function applyAutoBlank(text, rulesText) {
     result = result.split(item).join('\u0001W' + idx + '\u0002');
   });
 
-  // 4. 按占位符切分，非占位符的部分全部挖空
   const parts = result.split(/(\u0001[PW]\d+\u0002)/);
   const blankified = parts.map(part => {
     if (/^\u0001[PW]\d+\u0002$/.test(part)) return part;
     return blankify(part);
   }).join('');
 
-  // 5. 还原占位符
   return blankified.replace(/\u0001([PW])(\d+)\u0002/g, (m, type, i) => {
     return protectedItems[parseInt(i, 10)] || m;
   });
@@ -2047,7 +2194,6 @@ function previewAutoBlank() {
   DB._meta.autoBlankRules = rules;
   saveDB();
 
-  // 先分段，再挖空
   const segmented = smartSegment(text);
   const result = applyAutoBlank(segmented, rules);
 
@@ -2102,7 +2248,7 @@ function viewLibItem(id) {
   editTa.style.display = 'none';
   
   document.getElementById('libEditBtn').style.display = 'inline-block';
-  document.getElementById('libEditBtn').textContent = '✏️ 编辑';
+  document.getElementById('libEditBtn').textContent = '编辑';
   document.getElementById('libSaveBtn').style.display = 'none';
   isLibEditing = false;
 }
@@ -2352,9 +2498,35 @@ function renderArticle(silent){
   const hasJ = art.notes['简答'] && art.notes['简答'].trim().length > 0;
   const hasL = art.notes['论述'] && art.notes['论述'].trim().length > 0;
   
-  const lbl = lastReviewLabel(art.reviewDates && art.reviewDates[currentNoteType]);
+  const isDoneL = art.reviewDates && art.reviewDates['论述'] === todayStr();
+  const isDoneO = art.reviewDates && art.reviewDates['脉络卡'] === todayStr();
   const isDone = art.reviewDates && art.reviewDates[currentNoteType] === todayStr();
-  const displayPref = art.pref || getExamPreference(art.title);
+  
+  let reviewLabel = '';
+  let markBtns = '';
+
+  if (currentNoteType === '论述') {
+    const lblL = lastReviewLabel(art.reviewDates && art.reviewDates['论述']);
+    const lblO = lastReviewLabel(art.reviewDates && art.reviewDates['脉络卡']);
+    reviewLabel = `<span style="font-size:12px; color:#666; margin-right:10px;">[论述] ${lblL.text}</span><span style="font-size:12px; color:#666;">[脉络卡] ${lblO.text}</span>`;
+    
+    markBtns = `
+      <button class="mark-btn ${isDoneL?'done':''}" onclick="markAsReviewed('论述')" style="font-size:12px; padding:4px 10px;">${isDoneL ? '论述今天背过 ✓' : '论述今天背过'}</button>
+      <button class="mark-btn ${isDoneO?'done':''}" onclick="markAsReviewed('脉络卡')" style="font-size:12px; padding:4px 10px; margin-left:6px;">${isDoneO ? '脉络卡今天背过 ✓' : '脉络卡今天背过'}</button>
+    `;
+  } else {
+    const lbl = lastReviewLabel(art.reviewDates && art.reviewDates[currentNoteType]);
+    reviewLabel = `<span style="font-size:12px; color:#666;">[${currentNoteType}] ${lbl.text}</span>`;
+    markBtns = `<button class="mark-btn ${isDone?'done':''}" onclick="markAsReviewed('${currentNoteType}')">${isDone ? '今天已背 ✓' : '标记今天背过'}</button>`;
+  }
+  
+  if (art.pref && (art.pref.length > 15 || art.pref.includes('题') || art.pref.includes('新闻'))) {
+    art.pref = ''; 
+    saveDB();
+  }
+
+  let displayPref = getExamPreference(art.title);
+  if (!displayPref) displayPref = art.pref;
   
   header.innerHTML=`
     <div class="article-title-row">
@@ -2370,9 +2542,9 @@ function renderArticle(silent){
       <button class="sub-tab ${currentNoteType==='简答'?'active':''} ${hasJ?'has-content':''}" onclick="switchNoteType('简答')">简答</button>
       <button class="sub-tab ${currentNoteType==='论述'?'active':''} ${hasL?'has-content':''}" onclick="switchNoteType('论述')">论述</button>
     </div>
-    <div class="article-meta">
-      <span class="last-review ${lbl.cls}">[${currentNoteType}] ${lbl.text}</span>
-      <button class="mark-btn ${isDone?'done':''}" onclick="markAsReviewed()">${isDone?'今天已背 ✓':'标记今天背过'}</button>
+    <div class="article-meta" style="flex-wrap:wrap; gap:8px;">
+      ${reviewLabel}
+      ${markBtns}
       <button class="edit-btn" onclick="openEditArticle()">编辑当前题型</button>
       ${displayPref ? `<span style="font-size:12px; color:#800020; background:#fdf0f2; padding:2px 8px; border-radius:12px; font-weight:600;">考场偏好：${esc(displayPref)}</span>` : ''}
     </div>`;
@@ -2389,23 +2561,21 @@ function renderArticle(silent){
   buildOutline(art, keyPrefix);
   
   body.querySelectorAll('.blank').forEach(b=>{
-    if(recKeys.has(b.dataset.key))b.classList.add('recorded');
     b.addEventListener('click',async()=>{
-      if(b._longPressed){b._longPressed=false;return}
       const key=b.dataset.key;
-      if(recMode){if(b.classList.contains('recording')){stopRec();return}if(recKeys.has(key)){playRec(key,b);return}startRec(key,b);return}
       const wasOn=b.classList.contains('on');b.classList.toggle('on');
-      if(!wasOn){if(canSpeak)speechSynthesis.cancel();const played=await playRec(key,b);if(!played)speak(b.textContent.trim(),b)}
-      else{if(canSpeak)speechSynthesis.cancel();b.classList.remove('speaking');if(audioPlayer){audioPlayer.pause();audioPlayer=null}b.classList.remove('played')}
+      if(!wasOn){
+        if(canSpeak)speechSynthesis.cancel();
+        speak(b.textContent.trim(),b);
+      } else {
+        if(canSpeak)speechSynthesis.cancel();
+        b.classList.remove('speaking');
+        if(audioPlayer){audioPlayer.pause();audioPlayer=null}
+        b.classList.remove('played');
+      }
     });
-    let pressTimer=null;
-    const startPress=()=>{pressTimer=setTimeout(async()=>{const key=b.dataset.key;if(!recKeys.has(key))return;showUiModal('删除录音', '确定删除这条录音吗？', false, '', async function(){await dbDel(key);recKeys.delete(key);b.classList.remove('recorded','played','recording');b._longPressed=true;setTimeout(()=>{b._longPressed=false},300)})},700)};
-    const cancelPress=()=>{if(pressTimer){clearTimeout(pressTimer);pressTimer=null}};
-    b.addEventListener('mousedown',startPress);b.addEventListener('mouseup',cancelPress);b.addEventListener('mouseleave',cancelPress);
-    b.addEventListener('touchstart',startPress,{passive:true});b.addEventListener('touchend',cancelPress);b.addEventListener('touchcancel',cancelPress);
   });
   
-  // 只有当题型是"论述"时，才显示脉络卡
   const outlineCard = document.getElementById('outlineCard');
   if (currentNoteType === '论述') {
     outlineCard.style.display = 'block';
@@ -2456,7 +2626,7 @@ function buildOutline(art, keyPrefix){
   }
   let html='';
   config.forEach(para=>{
-    html += `<div class="outline-para">
+    html += `<div class="outline-para" id="outline-para-${config.indexOf(para)}">
       <div class="outline-para-label"><span>${esc(para.label||'')}</span><span class="pl-tag">${esc(para.tag||'')}</span></div>`;
     (para.items||[]).forEach(it=>{
       if(it.type==='sub'){
@@ -2534,7 +2704,6 @@ document.getElementById('editArticleText').addEventListener('keyup', updateSel);
 document.getElementById('editArticleText').addEventListener('touchend', updateSel);
 document.getElementById('editArticleText').addEventListener('mouseup', updateSel);
 
-/* 智能包裹：如果选中的文字已经被某个标记包裹（或选区左右紧邻标记），则替换/取消原标记 */
 function floatWrap(before, after){
   const ta = document.getElementById('editArticleText');
   let s = ta.selectionStart;
@@ -2546,7 +2715,6 @@ function floatWrap(before, after){
   const pairs = [['【','】'],['〔','〕'],['**','**'],['~~','~~']];
   const same = (b,a) => b === before && a === after;
 
-  // 情况 A：选中的文字本身就是一个完整包裹（如选中了【xxx】）
   for (const [b,a] of pairs){
     if (sel.length > b.length + a.length && sel.startsWith(b) && sel.endsWith(a)){
       const inner = sel.slice(b.length, sel.length - a.length);
@@ -2567,7 +2735,6 @@ function floatWrap(before, after){
     }
   }
 
-  // 情况 B：选区左右紧邻包裹符号（如选中 xxx，左侧是【，右侧是】）
   const left = v.slice(0, s);
   const right = v.slice(e);
   for (const [b,a] of pairs){
@@ -2591,7 +2758,6 @@ function floatWrap(before, after){
     }
   }
 
-  // 情况 C：普通包裹
   const newSel = before + sel + after;
   ta.value = v.slice(0, s) + newSel + v.slice(e);
   const ns = s + before.length, ne = s + before.length + sel.length;
@@ -2606,16 +2772,19 @@ function parseOutlineBatch() {
   const text = document.getElementById('outlineBatchInput').value;
   if (!text.trim()) { uiAlert('请先粘贴文本'); return; }
 
-  // 1. 提取题干中的理论/范式等信息
-  const titleMatch = text.match(/【题干】(.*?)｜/);
-  let prefStr = '';
-  if (titleMatch) {
-    // 拿到 "S-A｜骨架C｜圈A｜案例时效待核"
-    prefStr = titleMatch[1].trim(); 
+  const newDraft = [];
+
+  const titleMatch = text.match(/【题干】(.*?)(?:\n|$)/);
+  if (titleMatch && titleMatch[1].trim()) {
+    let titleText = titleMatch[1].trim();
+    
+    newDraft.push({
+      label: '题干',
+      tag: '定位',
+      items: [{ type: 'red', text: '题目：' + titleText }]
+    });
   }
 
-  // 2. 按段落【第x段·xxx】切割
-  // 使用正则全局匹配找到所有段落的位置
   const paraRegex = /【(第.*?段)·(.*?)】/g;
   let match;
   const sections = [];
@@ -2623,28 +2792,19 @@ function parseOutlineBatch() {
 
   while ((match = paraRegex.exec(text)) !== null) {
     if (lastIndex > 0 || sections.length > 0) {
-      // 保存上一段的内容
       sections[sections.length - 1].content = text.slice(lastIndex, match.index).trim();
     }
     sections.push({
-      label: match[1], // 如 "第一段"
-      tag: match[2],   // 如 "开篇"
+      label: match[1],
+      tag: match[2],
       content: ''
     });
     lastIndex = paraRegex.lastIndex;
   }
-  // 最后一段
   if (sections.length > 0) {
     sections[sections.length - 1].content = text.slice(lastIndex).trim();
   }
 
-  if (sections.length === 0) {
-    uiAlert('未找到【第一段】等段落标记，请检查格式。');
-    return;
-  }
-
-  // 3. 将内容转化为 Items
-  const newDraft = [];
   sections.forEach(sec => {
     const items = [];
     const lines = sec.content.split('\n');
@@ -2653,20 +2813,16 @@ function parseOutlineBatch() {
       line = line.trim();
       if (!line) return;
       
-      // 忽略不需要的内容
-      if (line.startsWith('├') || line.includes('（此处可扩写') || line.includes('（需核实年份')) {
-         // 如果是案例，我们过滤掉 "├ 案例：" 前缀，保留内容，并设置为 sub（小标题/灰色）
-         if (line.startsWith('├')) {
-           let caseText = line.replace(/^├\s*/, '');
-           if (caseText.includes('无。')) return;
-           // 这里改为 sub，它就会变成你截图里那种灰色小字
-           items.push({ type: 'sub', text: caseText });
-         }
+      if (line.includes('（此处可扩写') || line.includes('（需核实年份')) return;
+
+      if (line.startsWith('├')) {
+         let caseText = line.replace(/^├\s*/, '');
+         if (caseText.includes('无。')) return;
+         items.push({ type: 'sub', text: caseText });
          return;
       }
 
-      // 识别红点（得分点）
-      const redKeywords = ['核心判断：', '理论支撑：', '设限：', '价值判断：', '事实反转：', '反作用机制：', '方向路径：', '收尾回扣：', '拔高句：', '第一层，', '第二层，', '第三层，'];
+      const redKeywords = ['核心判断：', '理论支撑：', '设限：', '价值判断：', '事实反转：', '反作用机制：', '方向路径：', '收尾回扣：', '拔高句：', '第一层，', '第二层，', '第三层，', '边界限制：', '因此必须：'];
       
       let isRed = false;
       for (let kw of redKeywords) {
@@ -2679,7 +2835,6 @@ function parseOutlineBatch() {
       if (isRed) {
         items.push({ type: 'red', text: line });
       } else {
-        // 普通文本设为黑点
         items.push({ type: 'black', text: line });
       }
     });
@@ -2691,19 +2846,10 @@ function parseOutlineBatch() {
     });
   });
 
-  // 4. 更新当前文章
   olDraft = newDraft;
-  
-  // 顺便把题干里的偏好（如骨架C）更新到文章的 pref 字段里
-  const list = DB[curCircle][curPara] || [];
-  if (list[curPage] && prefStr) {
-    list[curPage].pref = prefStr;
-    saveDB();
-  }
-
   renderOutlineEditor();
   document.getElementById('outlineBatchInput').value = '';
-  uiAlert('解析成功！请检查下方生成的条目，无误后点击“保存”。');
+  uiAlert('解析成功！题干已保留，请检查下方生成的条目，无误后点击“保存”。');
 }
 
 function openOutlineEditor(){
@@ -2792,15 +2938,25 @@ function saveOutlineEditor(){
 
 function prevPage(){if(curPage>0){if(listenPlaying)stopListen();curPage--;renderArticle()}}
 function nextPage(){const list=DB[curCircle][curPara]||[];if(curPage<list.length-1){if(listenPlaying)stopListen();curPage++;renderArticle()}}
-function allOn(){document.querySelectorAll('#out .blank').forEach(b=>b.classList.add('on'))}
-function allOff(){document.querySelectorAll('#out .blank').forEach(b=>b.classList.remove('on'));if(canSpeak)speechSynthesis.cancel()}
 
-// 目录弹窗内的切换逻辑
+let isAllShown = true;
+function toggleAllBlank() {
+  const btn = document.getElementById('toggleAllBtn');
+  if (isAllShown) {
+    document.querySelectorAll('#out .blank').forEach(b => b.classList.remove('on'));
+    if (canSpeak) speechSynthesis.cancel();
+    btn.textContent = '◉ 全部隐藏';
+  } else {
+    document.querySelectorAll('#out .blank').forEach(b => b.classList.add('on'));
+    btn.textContent = '◉ 全部显示';
+  }
+  isAllShown = !isAllShown;
+}
+
 function changeTocCircle(c) {
   curCircle = c;
   curPara = PARADIGMS[c][0];
   curPage = 0;
-  // 仅刷新弹窗内容，不触发主界面重绘
   renderTocList(); 
 }
 function changeTocPara(p) {
@@ -2810,7 +2966,6 @@ function changeTocPara(p) {
 }
 
 function openToc(){
-  // 填充下拉框
   const cSel = document.getElementById('tocCircleSelect');
   const pSel = document.getElementById('tocParaSelect');
   
@@ -2823,28 +2978,41 @@ function openToc(){
 
 function renderTocList(){
   const list=DB[curCircle][curPara]||[];
-
-  // 同步范式下拉框，防止切换大圈层后，范式下拉框没变
-  const pSel = document.getElementById('tocParaSelect');
-  if (pSel) {
-    pSel.innerHTML = PARADIGMS[curCircle].map(p => `<option value="${p}" ${p === curPara ? 'selected' : ''}>${p}</option>`).join('');
-  }
-
   const html = list.length
     ? list.map((a,i)=>{
         const sel = a.selected !== false;
         const upDis = i===0 ? 'disabled' : '';
         const downDis = i===list.length-1 ? 'disabled' : '';
         
+        const hasN = a.notes && a.notes['名词解释'] && a.notes['名词解释'].trim().length > 0;
+        const hasJ = a.notes && a.notes['简答'] && a.notes['简答'].trim().length > 0;
+        const hasL = a.notes && a.notes['论述'] && a.notes['论述'].trim().length > 0;
+        const hasO = a.outline && a.outline.length > 0;
+
         const dN = a.reviewDates ? daysAgo(a.reviewDates['名词解释']) : null;
         const dJ = a.reviewDates ? daysAgo(a.reviewDates['简答']) : null;
         const dL = a.reviewDates ? daysAgo(a.reviewDates['论述']) : null;
+        const dO = a.reviewDates ? daysAgo(a.reviewDates['脉络卡']) : null;
+
+        let statusHtml = `<div style="margin-top:8px; display:flex; gap:8px; font-size:11px; color:#666; align-items:center; flex-wrap:wrap;">`;
         
-        let progText = '';
-        if(dN===0) progText += '名✓ '; else if(dN!==null) progText += `名${dN}天 `;
-        if(dJ===0) progText += '简✓ '; else if(dJ!==null) progText += `简${dJ}天 `;
-        if(dL===0) progText += '论✓ '; else if(dL!==null) progText += `论${dL}天 `;
-        if(!progText) progText = '未背';
+        if (dN === 0) statusHtml += `<span style="color:#0a7a3a; font-weight:bold;">名✓</span>`;
+        else if (dN !== null) statusHtml += `<span style="color:#c0392b;">名${dN}天</span>`;
+        else statusHtml += `<span style="opacity:${hasN?1:0.3}">${hasN?'●':'○'}名</span>`;
+
+        if (dJ === 0) statusHtml += `<span style="color:#0a7a3a; font-weight:bold;">简✓</span>`;
+        else if (dJ !== null) statusHtml += `<span style="color:#c0392b;">简${dJ}天</span>`;
+        else statusHtml += `<span style="opacity:${hasJ?1:0.3}">${hasJ?'●':'○'}简</span>`;
+
+        if (dL === 0) statusHtml += `<span style="color:#0a7a3a; font-weight:bold;">论✓</span>`;
+        else if (dL !== null) statusHtml += `<span style="color:#c0392b;">论${dL}天</span>`;
+        else statusHtml += `<span style="opacity:${hasL?1:0.3}">${hasL?'●':'○'}论</span>`;
+
+        if (dO === 0) statusHtml += `<span style="color:#0a7a3a; font-weight:bold;">卡✓</span>`;
+        else if (dO !== null) statusHtml += `<span style="color:#c0392b;">卡${dO}天</span>`;
+        else statusHtml += `<span style="opacity:${hasO?1:0.3}; color:#800020;">${hasO?'●':'○'}卡</span>`;
+        
+        statusHtml += `</div>`;
 
         return `<div class="toc-row ${sel?'':'dim'}">
           <div class="move-col">
@@ -2855,13 +3023,13 @@ function renderTocList(){
             <input type="checkbox" ${sel?'checked':''} onchange="toggleSelectArticle(${i}, this.checked)">
           </div>
           <button class="toc-item ${i===curPage?'active':''}" onclick="jumpTo(${i})">
-            <span class="row1"><span class="n">${String(i+1).padStart(2,'0')}</span><span>${esc(a.title)}</span></span>
-            <span class="last">${progText}</span>
+            <span class="row1"><span class="n">${String(i+1).padStart(2,'0')}</span><span style="font-size:15px;">${esc(a.title)}</span></span>
+            ${statusHtml}
           </button>
-          <button class="del-btn" onclick="event.stopPropagation();deleteArticle(${i})" title="删除此考点">🗑</button>
+          <button class="del-btn" onclick="event.stopPropagation();deleteArticle(${i})" title="删除" style="font-size:18px; font-weight:300;">×</button>
         </div>`;
       }).join('')
-    : '<p class="toc-empty">这个分类还没有内容，点击上方“➕ 添加考点”</p>';
+    : '<p class="toc-empty">这个分类还没有内容</p>';
   document.getElementById('tocList').innerHTML = html;
 }
 function closeToc(){document.getElementById('tocOverlay').classList.remove('show')}
@@ -2951,7 +3119,7 @@ function doImportPaste(){
     if(!data.db){uiAlert('文本格式不对');return}
     showUiModal('确认合并', '智能合并：内容与进度以备份为准，新版多出的考点会自动保留。继续？', false, '', function() {
       const oldDB = data.db;
-      let merged = 0, added = 0;
+      let merged = 0, added = 0, outlineCount = 0;
       
       if (oldDB._meta && oldDB._meta.circles) {
         oldDB._meta.circles.forEach(c => {
@@ -2991,8 +3159,17 @@ function doImportPaste(){
               else if(oldArt.lastReview) match.reviewDates = { '名词解释': null, '简答': null, '论述': oldArt.lastReview };
               
               if(oldArt.selected !== undefined) match.selected = oldArt.selected;
-              if(oldArt.outline) match.outline = oldArt.outline;
-              if(oldArt.pref) match.pref = oldArt.pref;
+              
+              if(oldArt.outline && Array.isArray(oldArt.outline) && oldArt.outline.length > 0) {
+                match.outline = JSON.parse(JSON.stringify(oldArt.outline));
+                outlineCount++;
+              } else if (!match.outline || match.outline.length === 0) {
+                match.outline = []; 
+              }
+              
+              if(oldArt.pref && oldArt.pref.length <= 15 && !oldArt.pref.includes('题')) {
+                  match.pref = oldArt.pref;
+              }
               merged++;
             } else {
               newList.push(oldArt);
@@ -3006,7 +3183,7 @@ function doImportPaste(){
       curPage = 0;
       render();
       closeImport();
-      uiAlert(`智能合并完成！\n匹配到 ${merged} 个考点\n补回 ${added} 个考点`);
+      uiAlert(`智能合并完成！\n匹配到 ${merged} 个考点\n补回 ${added} 个考点\n成功恢复 ${outlineCount} 个脉络卡！`);
     });
   }catch(err){uiAlert('解析失败：'+err.message);}
 }
@@ -3059,7 +3236,6 @@ function readTextFile(file, onProgress){
     };
     reader.onload = () => {
       const text = String(reader.result || '');
-      // 检测是否出现 UTF-8 解码乱码，尝试用 GBK 重解
       if(/\uFFFD/.test(text)){
         const reader2 = new FileReader();
         reader2.onload = () => {
@@ -3285,7 +3461,7 @@ async function importRawToLibrary(file, ext){
              hideProgressLater(4500);
              const upTa = document.getElementById('upContent');
              if(upTa) upTa.value = '';
-             uiAlert(`已转存为图片到资料库：${title}\n\n打开「📁 资料库」即可翻阅。`);
+             uiAlert(`已转存为图片到资料库：${title}\n\n打开「资料库」即可翻阅。`);
          });
          return;
       }
@@ -3313,7 +3489,7 @@ async function importRawToLibrary(file, ext){
     const upTa = document.getElementById('upContent');
     if(upTa) upTa.value = '';
 
-    uiAlert(`已导入资料库：${title}\n共 ${text.length} 字。\n\n打开「📁 资料库」即可查看；如含表格会自动渲染。`);
+    uiAlert(`已导入资料库：${title}\n共 ${text.length} 字。\n\n打开「资料库」即可查看；如含表格会自动渲染。`);
   } finally {
     setParseBtnEnabled(true);
   }
@@ -3323,13 +3499,11 @@ function cleanImportedText(text) {
   if (!text) return '';
   let t = String(text).replace(/\r/g, '');
 
-  // 1. 过滤乱码和单独的井号、横线
   t = t.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, '');
-  t = t.replace(/^#+\s*/gm, ''); // 去掉行首的 #
-  t = t.replace(/^\s*#\s*$/gm, ''); // 去掉单独一行的 #
+  t = t.replace(/^#+\s*/gm, '');
+  t = t.replace(/^\s*#\s*$/gm, '');
   t = t.replace(/^\s*---\s*$/gm, '');
 
-  // 2. 修复 OCR 常见的错字和全半角混用（针对你的截图特调）
   t = t.replace(/数字化\)构/g, '数字化重构')
        .replace(/公共性\)构/g, '公共性重构')
        .replace(/双\)过程/g, '双重过程')
@@ -3346,32 +3520,23 @@ function cleanImportedText(text) {
        .replace(/\)能力/g, '重能力')
        .replace(/三\)/g, '三重');
 
-  // 3. 将断行的序号与题型拼回去（如：三、\n论述： -> 三、论述：）
   t = t.replace(/([一二三四五六七八九十百\d]+)[、.．]\s*\n+\s*(论述|名词解释|简答|题干|题目)/g, '$1、$2');
   
-  // 4. 暴力抹平所有换行，变成一长段，防止结构被断行破坏
   t = t.replace(/\n+/g, ' ');
   
-  // 5. 在“题型”前面强制断行
-  // 匹配：一、名词解释： 或者 三、论述：
   t = t.replace(/([一二三四五六七八九十百\d]+)[、.．]\s*(名词解释|简答|论述|单选题|多选题|判断题|题干|题目)[：:]/g, '\n\n$1、$2：');
   
-  // 匹配没有序号的：论述：xxx 或者 名词解释：xxx
   t = t.replace(/(^|[。！？])\s*(论述|名词解释|简答)[：:]/g, '$1\n\n$2：');
   
-  // 6. 在“大考点”前面强制断行（如 批三十二、新闻生产）
   t = t.replace(/([一二三四五六七八九十百\d]+)[、.．]\s*(?!名词解释|简答|论述|单选题|多选题|判断题|题干|题目)/g, '\n\n$1、');
   
-  // 7. 在“组件”前强制断行，方便后续跳过
   t = t.replace(/(【记忆分组|【考点本体元信息|正文统计|学术延伸弹药|保底弹药|联动A圈|联动B圈)/g, '\n\n$1');
 
-  // 8. 整理多余空格
   t = t.replace(/ +\n/g, '\n').replace(/\n +/g, '\n').replace(/\n{3,}/g, '\n\n');
   
   return t.trim();
 }
 
-// 解析 PDF 文本
 async function extractPDF(file, onProgress){
   if(!window.pdfjsLib) throw new Error('PDF 库未加载，请联网后重试');
   pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
@@ -3399,11 +3564,9 @@ async function extractPDF(file, onProgress){
   if(!out.trim()){
     return { isScanned: true, pdf: pdf, text: '' };
   }
-  // 调用清理函数整理乱换行
   return { isScanned: false, pdf: pdf, text: cleanImportedText(out) };
 }
 
-// 渲染 PDF 为图片
 async function renderPdfToImages(pdf, maxPages=5, onProgress) {
   let md = '';
   const total = Math.min(pdf.numPages, maxPages);
@@ -3427,24 +3590,21 @@ async function renderPdfToImages(pdf, maxPages=5, onProgress) {
   return md;
 }
 
-// 全库智能搜索考点（支持跨圈层、模糊匹配）
 function findBestMatchInAllDB(targetTitle) {
-  if (!targetTitle || targetTitle.trim().length < 2) return null; // 防止空标题匹配乱套
+  if (!targetTitle || targetTitle.trim().length < 2) return null;
   let bestMatch = null;
   let maxScore = 0;
   
-  // 清洗目标标题：去括号、去空格、去题型前缀
   const cleanT = targetTitle.replace(/[（(].*?[)）]/g, '').replace(/\s+/g, '').replace(/^(论述(?:题)?|题干|题目)\s*[：:]?\s*/, '');
 
   for (let c of CIRCLES) {
     for (let p of PARADIGMS[c]) {
       for (let art of DB[c][p]) {
         const cleanX = art.title.replace(/[（(].*?[)）]/g, '').replace(/\s+/g, '');
-        if (cleanX.length < 2) continue; // 极短词跳过
+        if (cleanX.length < 2) continue;
         
         if (cleanT === cleanX) return { circle: c, para: p, art: art, score: 999 };
         
-        // 互相包含则判断长度，长度越接近越匹配
         if (cleanT.includes(cleanX) && cleanX.length > maxScore) {
           maxScore = cleanX.length;
           bestMatch = { circle: c, para: p, art: art, score: maxScore };
@@ -3460,41 +3620,43 @@ function findBestMatchInAllDB(targetTitle) {
 
 function getExamPreference(title) {
   if (!DB._library) return '';
-  const cleanT = title.replace(/[（(].*?[)）]/g, '').replace(/\s+/g, '').trim();
+  
+  let coreTitle = title;
+  if (coreTitle === 'UGC') coreTitle = '用户参与新闻生产';
+  if (coreTitle === '网络圈层化') coreTitle = '网络社群圈层化';
+  if (coreTitle === '平台型媒体') coreTitle = '平台治理';
+
+  const getCore = (str) => (str || '').replace(/[（(].*?[)）]/g, '').replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/g, '').toLowerCase();
+  const cleanT = getCore(coreTitle);
   if (!cleanT) return '';
 
   for (let lib of DB._library) {
     if (!lib.content) continue;
     const lines = lib.content.split('\n');
     
-    for (let line of lines) {
-      line = line.trim();
+    for (let i = 0; i < lines.length; i++) {
+      let line = lines[i].trim();
       if (!line || !line.includes('|')) continue;
 
-      // 分割这一行的所有列
       let cells = line.split('|').map(s => s.trim());
-      
-      // 1. 找这一行是不是你要的考点（默认考点名在第 1 列）
-      if (!cells[0]) continue;
-      const cleanC = cells[0].replace(/[（(].*?[)）]/g, '').replace(/\s+/g, '').trim();
-      if (cleanC === cleanT || cleanC.includes(cleanT) || cleanT.includes(cleanC)) {
-          
-          // 2. 找到了考点！现在遍历这一行，看看哪一列写着"优先"、"偏好"或者"题型"
-          // 从后往前找，因为偏好通常在表格靠右的位置
-          for (let i = cells.length - 1; i >= 0; i--) {
-             let cellText = cells[i];
-             // 只要这格里包含这些字眼，大概率就是偏好
-             if (cellText.includes('优先') || cellText.includes('偏好') || cellText.includes('简答/论述')) {
-                 // 排除掉可能抓错的表头行
-                 if (cellText.includes('考场') && cellText.length < 5) continue; 
-                 return cellText.replace(/[【】\[\]]/g, '');
-             }
-          }
-          
-          // 如果从后往前没找到字眼，那就尝试拿第 9 列（索引8）
-          if (cells.length > 8 && cells[8] && cells[8] !== '无') {
-             return cells[8].replace(/[【】\[\]]/g, '');
-          }
+      if (cells[0] === '') cells.shift();
+      if (cells[cells.length - 1] === '') cells.pop();
+
+      const pIdx = cells.findIndex(c => c === '考场偏好' || c === '偏好');
+      const tIdx = cells.findIndex(c => c === '考点');
+
+      if (pIdx !== -1 && tIdx !== -1) continue;
+
+      if (cells.length > 5) {
+        const checkTitle = getCore(cells[0]);
+        if (checkTitle && (checkTitle === cleanT || checkTitle.includes(cleanT) || cleanT.includes(checkTitle))) {
+           for (let c = 1; c < cells.length; c++) {
+              let val = cells[c].trim();
+              if ((val.includes('优先') || val.includes('均可') || val.includes('可能')) && val.length <= 15 && !val.includes('题')) {
+                 return val;
+              }
+           }
+        }
       }
     }
   }
@@ -3536,12 +3698,10 @@ function doParse(){
   };
 
   blocks.forEach(block => {
-    // 1. 跳过没用的组件
     if (block.startsWith('【记忆分组') || block.startsWith('【考点本体元信息') || block.startsWith('正文统计') || block.startsWith('---')) {
       return;
     }
     
-    // 2. 仅提取极其明确的考场偏好，不再宽松匹配
     if (block.includes('前置规则') || block.includes('考场偏好')) {
        let m = block.match(/(?:前置规则[^：:]*|考场偏好[^：:]*)[：:]\s*([^。\n【\(]{2,10})/);
        if (m) {
@@ -3550,7 +3710,6 @@ function doParse(){
        block = block.replace(/(?:前置规则[^：:]*|考场偏好[^：:]*)[：:]\s*[^。\n【\(]{2,10}/, '').trim();
     }
 
-    // 3. 识别题型（如：一、名词解释：xxx）
     const typeMatch = block.match(/^([一二三四五六七八九十百\d]+)[、.．]\s*(名词解释|简答|论述|单选题|多选题|判断题|题干|题目)[：:]\s*([\s\S]*)$/);
     if (typeMatch) {
       let typeWord = typeMatch[2];
@@ -3558,7 +3717,6 @@ function doParse(){
       
       if (typeWord === '题干' || typeWord === '题目') typeWord = '论述';
       
-      // 如果正文开头包含大考点名（如"新闻生产新闻生产指..."），切掉开头
       if (curBase && content.startsWith(curBase)) {
         content = content.substring(curBase.length).trim();
       }
@@ -3570,7 +3728,6 @@ function doParse(){
       return;
     }
 
-    // 4. 识别没有序号的题型（如：论述：xxx）
     const typeMatch2 = block.match(/^(名词解释|简答|论述|题干|题目)[：:]\s*([\s\S]*)$/);
     if (typeMatch2) {
       let typeWord = typeMatch2[1];
@@ -3588,7 +3745,6 @@ function doParse(){
       return;
     }
 
-    // 5. 识别大考点（如：批三十二、新闻生产）
     let newBase = block.replace(/^([一二三四五六七八九十百\d]+)[、.．]\s*/, '').replace(/[（(].*?[)）]/g, '').trim();
     if (newBase.length < 20 && !newBase.includes('。')) {
       pushArticle(); 
@@ -3609,12 +3765,9 @@ function doParse(){
   articles.forEach(a => {
     let match = findBestMatchInAllDB(a.base);
     
-    // 辅助函数：清理正文里的极端乱码，并保证段落感
     const cleanBody = (text) => {
       if (!text) return '';
-      // 如果一段里句号连句号，强行加换行
       let res = text.replace(/([。！？])(?=[^\n])/g, '$1\n\n');
-      // 把多重换行压缩，保证看起来舒服
       res = res.replace(/\n{3,}/g, '\n\n');
       return applyAutoBlank(smartSegment(res), rules);
     };
@@ -3623,7 +3776,6 @@ function doParse(){
     let J_blank = a.J ? cleanBody(a.J) : '';
     let L_blank = a.L ? cleanBody(a.L) : '';
 
-    // 自动获取考场偏好（如果 PDF 里没写的话，去五圈表里捞）
     let pref = a.pref;
     if (!pref) pref = getExamPreference(a.base);
 
@@ -3704,7 +3856,23 @@ function doDirectImport(){
   loadRecKeys();
   render();
 
-  // iOS PWA 语音解锁补丁：首次触摸/点击屏幕时，用一段静音唤醒音频引擎
+  setTimeout(() => {
+    let count = 0;
+    let names = [];
+    CIRCLES.forEach(c => {
+      PARADIGMS[c].forEach(p => {
+        (DB[c][p] || []).forEach(art => {
+          if (art.outline && art.outline.length > 0) {
+            count++;
+            names.push(art.title);
+          }
+        });
+      });
+    });
+    console.log(`%c [排雷] 本地数据库里，共有 ${count} 个考点存有脉络卡：`, 'color: #800020; font-size: 14px; font-weight: bold;');
+    console.log(names);
+  }, 1000);
+
   const unlockAudio = () => {
     if (window.speechSynthesis) {
       try {
@@ -3713,7 +3881,6 @@ function doDirectImport(){
         u.lang = 'zh-CN';
         speechSynthesis.speak(u);
       } catch(e) {}
-      // 尝试强制加载声音列表
       try { speechSynthesis.getVoices(); } catch(e) {}
     }
     document.removeEventListener('touchstart', unlockAudio);
@@ -3724,7 +3891,7 @@ function doDirectImport(){
 })();
 
 // ============================================================
-// 地图全屏逻辑（使用独立 IIFE 防止变量污染）
+// 地图全屏逻辑
 // ============================================================
 function openMap() {
   const mapView = document.getElementById('map-view');
@@ -4732,3 +4899,4 @@ function closeMap() {
 </script>
 </body>
 </html>
+```
