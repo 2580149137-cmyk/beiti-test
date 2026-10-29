@@ -19,18 +19,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Microsoft YaHei","PingFang SC
 .tabs-row-2{display:flex;border-bottom:1px solid #eee;margin-bottom:20px;overflow-x:auto;white-space:nowrap}
 .tab2{padding:9px 20px;background:transparent;border:none;border-bottom:1.5px solid transparent;margin-bottom:-1px;font-size:13px;letter-spacing:.05em;cursor:pointer;color:#bbb;font-family:inherit;transition:color .15s;flex-shrink:0}
 .tab2:hover{color:#555}.tab2.active{color:#111;border-bottom-color:#111;font-weight:600}
-.toolbar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center}
-.toolbar button{padding:6px 14px;font-size:12.5px;border:1px solid #111;background:#fff;color:#111;cursor:pointer;font-family:inherit;letter-spacing:.03em;transition:.15s;border-radius:2px;height:30px}
-.toolbar button:hover{background:#111;color:#fff}
-.toolbar button.off{color:#bbb;border-color:#ddd}.toolbar button.off:hover{background:#fff;color:#bbb}
-.toolbar button.rec-on,.toolbar button.listen-on,.toolbar button.mode-on{background:#111;color:#fff}
 
-/* 工具栏统一着装 —— 黑字点击变红 */
-.btn-normal { border: 1px solid #111 !important; color: #111 !important; background: #fff !important; font-weight: 600; }
+/* 工具栏：4列自适应网格 */
+.toolbar-grid { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+.toolbar-row { display: grid; gap: 8px; }
+.toolbar-row.row-4 { grid-template-columns: repeat(4, 1fr); }
+.toolbar-row.row-2 { grid-template-columns: repeat(2, 1fr); }
+.toolbar-row button { padding: 0 4px; font-size: 13px; border: 1px solid #111; background: #fff; color: #111; cursor: pointer; font-family: inherit; letter-spacing: .03em; transition: .15s; border-radius: 4px; height: 34px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.toolbar-row button:active { transform: scale(0.96); }
+.btn-normal { border-color: #111 !important; color: #111 !important; background: #fff !important; font-weight: 600; }
 .btn-normal:active { background-color: #800020 !important; color: #fff !important; border-color: #800020 !important; }
-
-/* 第二排红字点击变红 */
-.btn-red { border: 1px solid #800020 !important; color: #800020 !important; background: #fff !important; font-weight: 600; }
+.btn-red { border-color: #800020 !important; color: #800020 !important; background: #fff !important; font-weight: 600; }
 .btn-red:active { background-color: #800020 !important; color: #fff !important; }
 
 .rate-wrap{display:inline-flex;align-items:center;gap:9px;font-size:12.5px;color:#666;letter-spacing:.03em;border:1px solid #ddd;padding:0 12px;border-radius:2px;height:30px}
@@ -279,36 +278,55 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Microsoft YaHei","PingFang SC
 #tocOverlay .drawer-body { padding: 15px; overflow-y: auto; flex: 1; }
 #tocOverlay .drawer-footer { padding: 15px; border-top: 1px solid #eee; background: #fff; }
 
-/* ===== 极简右侧悬浮条 ===== */
+/* ===== 极简右侧悬浮条 (支持折叠成球) ===== */
 .listen-bar {
-  position: fixed; right: 8px; top: 55%; transform: translateY(-50%);
-  background: rgba(255, 255, 255, 0.95);
+  position: fixed; right: 12px; top: 50%; transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(0,0,0,0.05); border-radius: 12px;
-  padding: 10px 6px; z-index: 60;
-  display: none; flex-direction: column; align-items: center; gap: 10px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05);
-  width: 44px;
+  border: 1px solid rgba(0,0,0,0.1); border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  z-index: 60; transition: all 0.3s ease;
+  display: none; flex-direction: column;
 }
 .listen-bar.show { display: flex; }
-.listen-bar button {
-  background: none; border: none; color: #111; cursor: pointer;
-  font-family: inherit; font-size: 16px; padding: 0;
-  border-radius: 6px; transition: all 0.2s ease;
-  display: flex; justify-content: center; align-items: center;
-  width: 32px; height: 32px;
+/* 展开态 */
+.listen-bar.expanded { padding: 12px 8px; width: 54px; gap: 12px; align-items: center; }
+/* 收起态（球） */
+.listen-bar.collapsed { 
+  padding: 0; width: 48px; height: 48px; 
+  border-radius: 50%; 
+  align-items: center; justify-content: center; 
+  border: 2px solid #800020; background: #fff; cursor: pointer; 
+}
+.listen-bar.collapsed .lb-content { display: none !important; }
+.listen-bar.collapsed .lb-ball-content { display: flex !important; }
+.listen-bar.expanded .lb-ball-content { display: none !important; }
+
+/* 小球内的图标居中 */
+.lb-ball-content { 
+  color: #800020; 
+  width: 100%; height: 100%; 
+  display: flex; align-items: center; justify-content: center; 
+}
+
+/* 控制台内的按钮样式 */
+.listen-bar button { 
+  background: none; border: none; color: #111; cursor: pointer; 
+  font-family: inherit; font-size: 16px; padding: 0; 
+  border-radius: 6px; transition: all 0.2s ease; 
+  display: flex; justify-content: center; align-items: center; 
+  width: 34px; height: 34px; 
 }
 .listen-bar button:hover { background: #f0f0f0; color: #800020; }
-.listen-bar #lbPlay { font-size: 18px; font-weight: 600; color: #800020; }
-.lb-progress { color: #800020; font-variant-numeric: tabular-nums; font-size: 11px; font-weight: 700; }
-.lb-speed { font-size: 12px; font-weight: 700; background: #f0f0f0; color: #333; }
-.lb-speed:hover { background: #800020; color: #fff; }
-.listen-bar #lbLoop { font-size: 11px; background: #f0f0f0; color: #333; }
-.listen-bar #lbLoop.on { background: #800020; color: #fff; }
-.lb-close { color: #999 !important; font-size: 18px !important; }
+.listen-bar .lb-play-btn { font-size: 18px; font-weight: 900; color: #800020; border: 1px solid #800020; }
+.listen-bar .lb-toggle-btn { color: #999; font-size: 18px; margin-top: auto; }
+.lb-progress { color: #800020; font-variant-numeric: tabular-nums; font-size: 11px; font-weight: 700; text-align: center; }
+.lb-speed { font-size: 12px; font-weight: 700; background: #f0f0f0; color: #333; border-radius: 4px; padding: 2px 6px; height: auto; }
+.lb-loop { font-size: 11px; background: #f0f0f0; color: #333; padding: 2px 6px; height: auto; border-radius: 4px; }
+.lb-loop.on { background: #800020; color: #fff; }
 
 @media print{
-  .toolbar,.tabs-row,.tabs-row-2,.listen-bar,.outline-card,.upload-panel,
+  .toolbar-grid,.tabs-row,.tabs-row-2,.listen-bar,.outline-card,.upload-panel,
   .modal-overlay,.overlay,.rec-hint,.voice-row,.pager,.article-title::before,
   .article-meta,#floating-toolbar,.sub-tabs{
     display:none !important;
@@ -807,25 +825,22 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Microsoft YaHei","PingFang SC
 <div class="tabs-row" id="tabsRow1"></div>
 <div class="tabs-row-2" id="tabsRow2"></div>
 
-<div class="toolbar" style="flex-direction: column; align-items: flex-start; gap: 8px;">
-  <!-- 第一排：黑色 -->
-  <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+<div class="toolbar-grid">
+  <div class="toolbar-row row-4">
     <button onclick="openToc()" class="btn-normal">≡ 目录</button>
     <button onclick="addNewCircle()" class="btn-normal">⊕ 圈层</button>
-    <button onclick="openReview()" class="btn-normal">○ 复习进度</button>
-    <button onclick="openMap()" class="btn-normal">△ 概念地图</button>
+    <button onclick="openReview()" class="btn-normal">○ 复习</button>
+    <button onclick="openMap()" class="btn-normal">△ 地图</button>
   </div>
-  <!-- 第二排：红色，点击色块变红 -->
-  <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-    <button onclick="toggleListenPanel()" class="btn-red">▷ 听读控制</button>
-    <button onclick="toggleAllBlank()" id="toggleAllBtn" class="btn-red">◉ 全部显示</button>
+  <div class="toolbar-row row-4">
+    <button onclick="toggleListenPanel()" class="btn-red">▷ 听读</button>
+    <button onclick="toggleAllBlank()" id="toggleAllBtn" class="btn-red">◉ 显示</button>
     <button onclick="toggleUpload()" class="btn-red">↑ 导入</button>
     <button onclick="printThis()" class="btn-red">⊡ 打印</button>
   </div>
-  <!-- 第三排：黑色 -->
-  <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+  <div class="toolbar-row row-2">
     <button onclick="openLibrary()" class="btn-normal">◇ 资料库</button>
-    <button onclick="toggleBackupPanel()" class="btn-normal">◈ 备份管理</button>
+    <button onclick="toggleBackupPanel()" class="btn-normal">◈ 备份</button>
   </div>
 </div>
 
@@ -844,13 +859,21 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Microsoft YaHei","PingFang SC
 </div>
 
 <div class="listen-bar" id="listenBar">
-  <span class="lb-progress" id="lbProgress">1/1</span>
-  <button onclick="listenPrev()" title="上一段">&lt;</button>
-  <button id="lbPlay" onclick="listenToggle()" style="font-weight:900; font-size:16px;">||</button>
-  <button onclick="listenNext()" title="下一段">&gt;</button>
-  <button id="lbLoop" onclick="toggleLoop()" title="循环" style="font-size:12px; font-weight:600;">循环</button>
-  <button class="lb-speed" id="lbSpeed" onclick="cycleSpeed()" title="倍速">1.0</button>
-  <button class="lb-close" onclick="stopListen()" title="关闭">×</button>
+  <!-- 收起状态的球 -->
+  <div class="lb-ball-content" onclick="toggleListenBar()">
+    <span style="font-size: 18px; margin-left: 2px;">▶</span>
+  </div>
+  
+  <!-- 展开状态的控制台 -->
+  <div class="lb-content" style="display:flex; flex-direction:column; align-items:center; gap:10px; width:100%;">
+    <span class="lb-progress" id="lbProgress">1/1</span>
+    <button onclick="listenPrev()" title="上一考点">&lt;</button>
+    <button class="lb-play-btn" id="lbPlay" onclick="listenToggle()">||</button>
+    <button onclick="listenNext()" title="下一考点">&gt;</button>
+    <button class="lb-loop" id="lbLoop" onclick="toggleLoop()">循环</button>
+    <button class="lb-speed" id="lbSpeed" onclick="cycleSpeed()">1.0x</button>
+    <button class="lb-toggle-btn" onclick="toggleListenBar()" title="收起">»</button>
+  </div>
 </div>
 
 <!-- 听读控制面板 -->
@@ -858,27 +881,40 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Microsoft YaHei","PingFang SC
   <div class="modal-box" style="max-width:400px">
     <div class="modal-header"><span>听读控制</span><button onclick="toggleListenPanel()">✕</button></div>
     <div class="modal-body">
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:15px;">
-        <button class="timer-opt" onclick="toggleVoice()" id="voiceBtn" style="grid-column: span 2;">朗读开关：开</button>
-        <button class="timer-opt" onclick="startListen(); toggleListenPanel();">听整篇</button>
-        <button class="timer-opt" onclick="startListenOutline(); toggleListenPanel();">听脉络卡</button>
-        <button class="timer-opt" onclick="toggleLoop(); updateListenBtns();" id="loopBtnModal">循环本篇：关</button>
-        <button class="timer-opt" onclick="toggleSelectLoop(); updateListenBtns();" id="selLoopBtnModal">循环听选中：关</button>
+      
+      <!-- 选择内容源 -->
+      <div style="margin-bottom:16px; padding:12px; border:1px solid #eee; border-radius:6px; background:#fafafa;">
+        <div style="font-size:13px; font-weight:600; margin-bottom:8px;">🎯 选择朗读内容（切换后生效）</div>
+        <select id="listenSourceSelect" onchange="changeListenSource(this.value)" style="width:100%; padding:10px; border:1px solid #111; border-radius:4px; font-family:inherit; font-size:14px; background:#fff; outline:none;">
+          <option value="脉络卡" selected>只听脉络卡</option>
+          <option value="论述">听论述正文</option>
+          <option value="简答">听简答正文</option>
+          <option value="名词解释">听名词解释正文</option>
+        </select>
+      </div>
+
+      <!-- 播放控制 -->
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px;">
+        <button onclick="startListen(); toggleListenPanel();" style="padding:12px; border:1px solid #800020; color:#fff; background:#800020; font-weight:600; border-radius:4px; font-family:inherit;">▶ 开始连续播放</button>
+        <button onclick="toggleSelectLoop(); updateListenBtns();" id="selLoopBtnModal" style="padding:12px; border:1px solid #0a7a3a; color:#0a7a3a; background:#fff; font-weight:600; border-radius:4px; font-family:inherit;">循环听选中：关</button>
       </div>
       
-      <div style="margin-bottom:15px; padding:10px; border:1px solid #eee; border-radius:4px;">
-        <div style="font-size:13px; font-weight:600; margin-bottom:8px;">选择声音</div>
-        <select id="voiceSelect" style="width:100%; margin-bottom:10px; padding:8px; border:1px solid #111; border-radius:3px; font-family:inherit;"></select>
-        <button onclick="tryVoice()" style="width:100%; padding:8px; border:1px solid #111; background:#fff; color:#111; cursor:pointer; border-radius:3px;">▶ 试听声音</button>
+      <!-- 声音选择 -->
+      <div style="margin-bottom:16px; padding:12px; border:1px solid #eee; border-radius:6px;">
+        <div style="font-size:13px; font-weight:600; margin-bottom:8px;">🔊 选择声音</div>
+        <select id="voiceSelect" style="width:100%; margin-bottom:10px; padding:10px; border:1px solid #111; border-radius:4px; font-family:inherit; font-size:14px; outline:none;"></select>
+        <button onclick="tryVoice()" style="width:100%; padding:10px; border:1px solid #111; background:#fff; color:#111; cursor:pointer; border-radius:4px; font-weight:600; font-family:inherit;">▶ 试听声音</button>
       </div>
       
-      <label class="rate-wrap" style="width:100%; justify-content:space-between; height:auto; padding:10px; display:flex; align-items:center; gap:10px; border:1px solid #ddd; border-radius:4px;">
-        <span style="font-size:13px; color:#666;">朗读语速</span>
-        <div style="display:flex; align-items:center; gap:10px;">
-          <input type="range" id="rate" min="0.8" max="2" step="0.1" value="1.1">
-          <span id="rateVal">1.1</span>
+      <!-- 语速调节 -->
+      <div style="padding:12px; border:1px solid #eee; border-radius:6px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-size:13px; font-weight:600; color:#333;">朗读语速</span>
+          <span id="rateVal" style="font-size:13px; font-weight:700; color:#800020;">1.0x</span>
         </div>
-      </label>
+        <input type="range" id="rate" min="0.5" max="1.8" step="0.05" value="1.0" style="width:100%; accent-color:#800020;">
+      </div>
+      
     </div>
   </div>
 </div>
@@ -1243,6 +1279,8 @@ function updateListenBtns() {
   if(lBtn) lBtn.textContent = listenLoop ? '循环本篇：开' : '循环本篇：关';
   const sBtn = document.getElementById('selLoopBtnModal');
   if(sBtn) sBtn.textContent = selectLoop ? '循环听选中：开' : '循环听选中：关';
+  const srcSel = document.getElementById('listenSourceSelect');
+  if (srcSel && srcSel.value !== currentListenSource) srcSel.value = currentListenSource;
 }
 function toggleBackupPanel() {
   document.getElementById('backupModal').classList.toggle('show');
@@ -1277,7 +1315,7 @@ function isChineseVoice(v) {
   const lang = (v.lang || '').toLowerCase();
   const name = (v.name || '').toLowerCase();
   return lang.includes('zh') || 
-         /婷|月|云|黎|牧|莉|莎|珊|陶|田|语舒|美嘉|yun|yue|siri|ting|eloquence/i.test(name);
+         /婷|月|云|黎|牧|莉|莎|珊|陶|田|语舒|美嘉|yun|yue|siri|ting|eloquence|liulian|刘恋|liu/i.test(name);
 }
 
 function loadVoices(){
@@ -1287,7 +1325,7 @@ function loadVoices(){
   
   let zh = all.filter(isChineseVoice); 
   
-  const priorityNames = ['月', 'Yue', 'Yun', 'Siri', '黎澈', '语舒', '婷婷'];
+  const priorityNames = ['月', 'Yue', 'Yun', 'Siri', '黎澈', '语舒', '婷婷', '刘恋'];
   zh.sort((a,b)=>{
     const aName = a.name || '';
     const bName = b.name || '';
@@ -1327,7 +1365,7 @@ if(canSpeak){loadVoices();speechSynthesis.onvoiceschanged=loadVoices;setTimeout(
 const _voiceSelect = document.getElementById('voiceSelect');
 if(_voiceSelect) _voiceSelect.addEventListener('change',function(){const i=+this.value;pickedVoice=zhVoices[i]||null;localStorage.setItem('kf_voice_idx',i);tryVoice()});
 function tryVoice(){speak('情感动员不是外在噪音。',null)}
-function speak(text,el){if(!voiceOn||!text||!canSpeak)return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang=(pickedVoice&&pickedVoice.lang)||'zh-CN';u.rate=parseFloat(document.getElementById('rate').value)||1.1;u.pitch=1;if(pickedVoice)u.voice=pickedVoice;if(el){u.onstart=()=>el.classList.add('speaking');u.onend=()=>el.classList.remove('speaking');u.onerror=()=>el.classList.remove('speaking')}if (speechSynthesis.paused) speechSynthesis.resume();speechSynthesis.speak(u)}
+function speak(text,el){if(!voiceOn||!text||!canSpeak)return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang=(pickedVoice&&pickedVoice.lang)||'zh-CN';u.rate=parseFloat(document.getElementById('rate').value)||1.0;u.pitch=1;if(pickedVoice)u.voice=pickedVoice;if(el){u.onstart=()=>el.classList.add('speaking');u.onend=()=>el.classList.remove('speaking');u.onerror=()=>el.classList.remove('speaking')}if (speechSynthesis.paused) speechSynthesis.resume();speechSynthesis.speak(u)}
 function toggleVoice(){
   voiceOn=!voiceOn;
   const b=document.getElementById('voiceBtn');
@@ -1335,33 +1373,80 @@ function toggleVoice(){
   if(!voiceOn&&canSpeak)speechSynthesis.cancel();
 }
 function toggleVoiceRow(){const v=document.getElementById('voiceRow');if(v)v.classList.toggle('show')}
+
+// 语速滑块监听（新面板）
 const _rate = document.getElementById('rate');
-if(_rate) _rate.addEventListener('input',function(){const rv=document.getElementById('rateVal');if(rv)rv.textContent=parseFloat(this.value).toFixed(1);const lb=document.getElementById('lbRate');if(lb)lb.value=this.value});
-const _lbRate = document.getElementById('lbRate');
-if(_lbRate) _lbRate.addEventListener('input',function(){const r=document.getElementById('rate');if(r)r.value=this.value;const rv=document.getElementById('rateVal');if(rv)rv.textContent=parseFloat(this.value).toFixed(1)});
+if(_rate) {
+  _rate.addEventListener('input', function() {
+    const val = parseFloat(this.value).toFixed(2);
+    const rv = document.getElementById('rateVal');
+    if(rv) rv.textContent = val + 'x';
+    currentSpeed = parseFloat(val);
+  });
+}
 
 // ============================================================
-// 听整篇 & 听脉络卡
+// 听整篇 & 听脉络卡 —— 核心
 // ============================================================
 let listenPlaying=false,listenParas=[],listenIdx=-1,listenLoop=false;
 let selectLoop=false;
 let speakSession=0;
-let isListeningOutline = false;
+let isListeningOutline = true;  // 与新面板默认（脉络卡）保持一致
+let isListenBarCollapsed = true;
+let currentListenSource = '脉络卡';   // '脉络卡' / '论述' / '简答' / '名词解释'
 
 let currentSpeed = 1.0;
 const speeds = [1.0, 1.2, 1.5, 1.8, 0.8];
 function cycleSpeed() {
   let idx = speeds.indexOf(currentSpeed);
+  if (idx === -1) idx = 0;
   idx = (idx + 1) % speeds.length;
   currentSpeed = speeds[idx];
   const speedEl = document.getElementById('lbSpeed');
-  if(speedEl) speedEl.textContent = currentSpeed.toFixed(1);
+  if(speedEl) speedEl.textContent = currentSpeed.toFixed(1) + 'x';
   const rateEl = document.getElementById('rate');
   if(rateEl) rateEl.value = currentSpeed;
   const rateValEl = document.getElementById('rateVal');
-  if(rateValEl) rateValEl.textContent = currentSpeed.toFixed(1);
-  if(listenPlaying && listenIdx >= 0 && !isListeningOutline) {
+  if(rateValEl) rateValEl.textContent = currentSpeed.toFixed(1) + 'x';
+  if(listenPlaying && listenIdx >= 0) {
     speakPara(listenIdx);
+  }
+}
+
+function toggleListenBar() {
+  isListenBarCollapsed = !isListenBarCollapsed;
+  const lb = document.getElementById('listenBar');
+  if(!lb) return;
+  if(isListenBarCollapsed) { lb.classList.add('collapsed'); lb.classList.remove('expanded'); }
+  else { lb.classList.remove('collapsed'); lb.classList.add('expanded'); }
+}
+
+function changeListenSource(val) {
+  currentListenSource = val;
+  isListeningOutline = (val === '脉络卡');
+  const sel = document.getElementById('listenSourceSelect');
+  if (sel && sel.value !== val) sel.value = val;
+  if (listenPlaying) stopListen();
+}
+
+function getValidPages() {
+  const list = DB[curCircle][curPara] || [];
+  const useOutline = (currentListenSource === '脉络卡');
+  return list.map((a, i) => ({ a, i })).filter(x => {
+    if (useOutline) return x.a.outline && x.a.outline.length > 0;
+    return x.a.notes && x.a.notes[currentListenSource] && x.a.notes[currentListenSource].trim().length > 0;
+  }).map(x => x.i);
+}
+
+function findNextValidPage(currentIdx, dir) {
+  const validPages = getValidPages();
+  if(!validPages.length) return -1;
+  if(dir === 1) {
+    const next = validPages.find(idx => idx > currentIdx);
+    return next !== undefined ? next : (selectLoop || listenLoop) ? validPages[0] : -1;
+  } else {
+    const prev = [...validPages].reverse().find(idx => idx < currentIdx);
+    return prev !== undefined ? prev : (selectLoop || listenLoop) ? validPages[validPages.length-1] : -1;
   }
 }
 
@@ -1375,305 +1460,265 @@ function toggleSelectLoop(){
   selectLoop=!selectLoop;
   updateListenBtns();
   if(selectLoop && !listenPlaying){
-    if(isListeningOutline) startListenOutline(); else startListen();
+    startListen();
   }
   else if(!selectLoop && listenPlaying){ stopListen(); }
 }
 function toggleListen(){
-  if(listenPlaying && !isListeningOutline) stopListen();
-  else {
-    if(listenPlaying) stopListen();
-    isListeningOutline = false;
-    startListen();
-  }
+  if(listenPlaying) stopListen();
+  else startListen();
 }
 function toggleListenOutline(){
+  // 兼容旧按钮：直接切到脉络卡后开始
+  currentListenSource = '脉络卡';
+  isListeningOutline = true;
+  const sel = document.getElementById('listenSourceSelect');
+  if (sel) sel.value = '脉络卡';
   if(listenPlaying && isListeningOutline) stopListen();
   else {
     if(listenPlaying) stopListen();
-    isListeningOutline = true;
-    startListenOutline();
+    startListen();
   }
-}
-
-function getPlayList(){
-  const list = DB[curCircle][curPara] || [];
-  if(selectLoop){
-    const picked = list.map((a,i)=>({a,i})).filter(x=>x.a.selected !== false);
-    return picked.length ? picked : list.map((a,i)=>({a,i}));
-  }
-  return list.map((a,i)=>({a,i}));
 }
 
 function startListen(){
   if(!canSpeak){uiAlert('这个浏览器不支持语音合成');return}
-  const list = DB[curCircle][curPara] || [];
-  const art = list[curPage];
-  if(!art || !art.notes[currentNoteType] || !art.notes[currentNoteType].trim()){
-    uiAlert(`当前考点的「${currentNoteType}」暂未添加内容，无法朗读。`);
+  
+  // 根据 currentListenSource 决定读取什么内容
+  isListeningOutline = (currentListenSource === '脉络卡');
+  const targetNoteType = isListeningOutline ? '论述' : currentListenSource;
+  
+  // 需要的话切换显示题型，保证 renderArticle 后正文/脉络卡可见
+  if (currentNoteType !== targetNoteType) {
+    currentNoteType = targetNoteType;
+  }
+  
+  const validPages = getValidPages();
+  if(!validPages.length){
+    uiAlert(`当前范围的「${currentListenSource}」没有可朗读的内容`);
     return;
   }
-  speechSynthesis.cancel();
-  document.querySelectorAll('#out p').forEach(p=>p.classList.remove('listening'));
-  document.querySelectorAll('.article-title').forEach(t=>t.classList.remove('listening'));
-  document.querySelectorAll('#out .blank').forEach(b=>b.classList.add('on'));
-  listenParas=[...document.querySelectorAll('#out p')].filter(p => !p.classList.contains('empty') && p.textContent.trim().length);
-  if(!listenParas.length)return;
+  if(!validPages.includes(curPage)) curPage = validPages[0];
+  renderArticle(true);
+  
+  if(canSpeak) speechSynthesis.cancel();
   listenPlaying=true; listenIdx=-1; speakSession=0;
-  document.getElementById('listenBar').classList.add('show');
-  document.getElementById('lbLoop').classList.toggle('on',listenLoop);
+  
+  const lb = document.getElementById('listenBar');
+  if(lb) {
+    lb.classList.add('show');
+    lb.classList.remove('collapsed');
+    lb.classList.add('expanded');
+    isListenBarCollapsed = false;
+  }
+  const lbLoop = document.getElementById('lbLoop');
+  if(lbLoop) lbLoop.classList.toggle('on',listenLoop);
+  const lbPlay = document.getElementById('lbPlay');
+  if(lbPlay) lbPlay.textContent = '||';
+  
+  // 同步面板上的下拉框
+  const sel = document.getElementById('listenSourceSelect');
+  if (sel && sel.value !== currentListenSource) sel.value = currentListenSource;
+  
   speakTitle();
 }
 
+// 兼容旧调用：直接切到脉络卡再 startListen
 function startListenOutline(){
-  if(!canSpeak){uiAlert('这个浏览器不支持语音合成');return}
-  
-  // 如果当前不在论述题型，强制切换过去，否则面板隐藏没法滚动
-  if (currentNoteType !== '论述') {
-    currentNoteType = '论述';
-    renderArticle(true);
-  }
-
-  const list = DB[curCircle][curPara] || [];
-  const art = list[curPage];
-  if(!art || !art.outline || !art.outline.length){
-    uiAlert('本篇还没有配置脉络卡，无法朗读。'); return;
-  }
-  
-  const card = document.getElementById('outlineCard');
-  if(card) {
-    card.style.display = 'block';
-    if(!card.classList.contains('open')) {
-        card.classList.add('open');
-        document.getElementById('outlineToggle').textContent='收起 ▲';
-    }
-  }
-
-  listenParas = [];
-  const paraDoms = document.querySelectorAll('.outline-para');
-  
-  art.outline.forEach((para, pIdx) => {
-    let text = `${para.label}。`;
-    if(para.tag) text += `${para.tag}。`;
-    para.items.forEach(it => { text += `${it.text}。`; });
-    
-    listenParas.push({ 
-      textContent: text, 
-      dom: paraDoms[pIdx] || null,
-      paraIndex: pIdx
-    });
-  });
-  
-  speechSynthesis.cancel();
-  document.querySelectorAll('#out p').forEach(p=>p.classList.remove('listening'));
-  document.querySelectorAll('.article-title').forEach(t=>t.classList.remove('listening'));
-  
-  listenPlaying=true; listenIdx=-1; speakSession=0;
-  document.getElementById('listenBar').classList.add('show');
-  const loBtn = document.getElementById('listenOutlineBtn');
-  if(loBtn){ loBtn.classList.add('listen-on'); loBtn.textContent='停止'; }
-  const lBtn = document.getElementById('listenBtn');
-  if(lBtn){ lBtn.classList.remove('listen-on'); lBtn.textContent='听整篇'; }
-  document.getElementById('lbLoop').classList.toggle('on',listenLoop);
-  
-  speakTitle();
+  currentListenSource = '脉络卡';
+  isListeningOutline = true;
+  const sel = document.getElementById('listenSourceSelect');
+  if (sel) sel.value = '脉络卡';
+  startListen();
 }
 
 function speakTitle(){
-  if(!listenPlaying||!canSpeak)return;
-  speechSynthesis.cancel();
-  const currentSession=++speakSession;
-  document.querySelectorAll('#out p').forEach(p=>p.classList.remove('listening'));
-  const titleEl=document.querySelector('.article-title');
-  listenIdx=-1;
-  updateListenBar();
-  const art=(DB[curCircle][curPara]||[])[curPage];
-  if(!art||!art.title){scheduleSpeak(0);return}
-  if(titleEl)titleEl.classList.add('listening');
-  titleEl&&titleEl.scrollIntoView({block:'center',behavior:'smooth'});
+  if(!listenPlaying) return;
+  if(canSpeak) speechSynthesis.cancel();
+  const art = (DB[curCircle][curPara]||[])[curPage];
+  if(!art) { stopListen(); return; }
   
-  const u=new SpeechSynthesisUtterance(art.title + (isListeningOutline ? '，脉络卡。' : ''));
-  u.lang=(pickedVoice&&pickedVoice.lang)||'zh-CN';
-  u.rate=currentSpeed;
-  u.pitch=1;
-  if(pickedVoice)u.voice=pickedVoice;
+  const titleEl = document.querySelector('.article-title');
+  if(titleEl){
+    titleEl.classList.add('listening');
+    titleEl.scrollIntoView({block:'center',behavior:'smooth'});
+  }
+  
+  const currentSession = ++speakSession;
+  const u = new SpeechSynthesisUtterance(art.title + (isListeningOutline ? '，脉络卡。' : ''));
+  u.lang = (pickedVoice && pickedVoice.lang) || 'zh-CN';
+  u.rate = currentSpeed;
+  u.pitch = 1;
+  if(pickedVoice) u.voice = pickedVoice;
+  
+  u.onend = () => {
+    if(currentSession !== speakSession) return;
+    if(titleEl) titleEl.classList.remove('listening');
+    if(!listenPlaying) return;
+    prepareParasAndSpeak();
+  };
+  u.onerror = (e) => {
+    if(currentSession !== speakSession) return;
+    if(!listenPlaying) return;
+    if(e.error === 'interrupted' || e.error === 'canceled') return;
+    if(titleEl) titleEl.classList.remove('listening');
+    prepareParasAndSpeak();
+  };
   
   if (speechSynthesis.paused) speechSynthesis.resume();
-  
-  u.onend=()=>{
-    if(currentSession!==speakSession)return;
-    if(titleEl)titleEl.classList.remove('listening');
-    if(!listenPlaying)return;
-    if(!listenParas.length){stopListen();return}
-    scheduleSpeak(0);
-  };
-  u.onerror=(e)=>{
-    if(currentSession!==speakSession)return;
-    if(!listenPlaying)return;
-    if(e.error==='interrupted'||e.error==='canceled')return;
-    if(titleEl)titleEl.classList.remove('listening');
-    if(!listenParas.length){stopListen();return}
-    scheduleSpeak(0);
-  };
   speechSynthesis.speak(u);
 }
 
-function scheduleSpeak(i){
-  if(!listenPlaying)return;
-  if(i===-99){setTimeout(()=>{if(!listenPlaying)return;speakTitle()},280);return}
-  setTimeout(()=>{
-    if(!listenPlaying)return;
-    if(i<0||i>=listenParas.length){finishArticle();return}
-    speakPara(i);
-  },180);
+function prepareParasAndSpeak(){
+  if(!listenPlaying) return;
+  const art = (DB[curCircle][curPara]||[])[curPage];
+  if(!art){ nextPageAuto(); return; }
+  
+  listenParas = [];
+  listenIdx = -1;
+  
+  if(isListeningOutline){
+    if(art.outline && art.outline.length){
+      const paraDoms = document.querySelectorAll('.outline-para');
+      art.outline.forEach((p, pIdx) => {
+        let txt = `${p.label||''}。${p.tag||''}。`;
+        if(p.items){
+          p.items.forEach(it => { if(it.text) txt += `${it.text}。`; });
+        }
+        listenParas.push({ textContent: txt, dom: paraDoms[pIdx] || null, paraIndex: pIdx });
+      });
+    }
+  } else {
+    const paras = [...document.querySelectorAll('#out p')].filter(p => !p.classList.contains('empty') && p.textContent.trim().length);
+    paras.forEach(p => p.querySelectorAll('.blank').forEach(b => b.classList.add('on')));
+    listenParas = paras;
+  }
+  
+  if(!listenParas.length){ nextPageAuto(); return; }
+  speakPara(0);
 }
 
 function speakPara(i){
-  if(!listenPlaying)return;
-  if(!listenParas.length){stopListen();return}
-  if(i<0||i>=listenParas.length){finishArticle();return}
-  listenIdx=i;
+  if(!listenPlaying) return;
+  if(!listenParas.length){ nextPageAuto(); return; }
+  if(i<0 || i>=listenParas.length){ nextPageAuto(); return; }
+  listenIdx = i;
   
-  if(!isListeningOutline){
-    document.querySelectorAll('#out p').forEach(p=>p.classList.remove('listening'));
-    const pEl = document.querySelectorAll('#out p')[i];
-    if(pEl){ pEl.classList.add('listening'); pEl.scrollIntoView({block:'center',behavior:'smooth'}); }
+  let text = '';
+  
+  if(isListeningOutline){
+    document.querySelectorAll('.outline-para').forEach(el => el.style.background = 'transparent');
+    const item = listenParas[i];
+    if(item.dom){
+      item.dom.style.background = '#fdf0f2';
+      setTimeout(() => {
+        if(!listenPlaying) return;
+        const yOffset = -100;
+        const y = item.dom.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({top: y, behavior: 'auto'});
+      }, 100);
+    }
+    text = item.textContent || '';
   } else {
-    // 清除旧高亮
-    document.querySelectorAll('.outline-para').forEach(el => {
-       el.style.background = 'transparent';
-    });
-    
-    const pIdx = listenParas[i].paraIndex; 
-    // 通过 ID 直接寻找目标
-    const targetEl = document.getElementById(`outline-para-${pIdx}`);
-    
-    if(targetEl){
-       targetEl.style.background = '#fdf0f2'; 
-       
-       // 使用强力物理滚动，禁用所有平滑动画
-       setTimeout(() => {
-         const yOffset = -100; // 距离顶部留白
-         const y = targetEl.getBoundingClientRect().top + window.pageYOffset + yOffset;
-         window.scrollTo({top: y, behavior: 'auto'}); 
-       }, 100);
+    document.querySelectorAll('#out p').forEach(p => p.classList.remove('listening'));
+    const pEl = listenParas[i];
+    if(pEl){
+      pEl.classList.add('listening');
+      pEl.scrollIntoView({block:'center',behavior:'smooth'});
+      text = (pEl.textContent || '').replace(/\s+/g,' ').trim();
     }
   }
   
-  updateListenBar();
-  const text=(listenParas[i].textContent||'').replace(/\s+/g,' ').trim();
-  if(!text){scheduleSpeak(i+1);return}
+  const prog = document.getElementById('lbProgress');
+  if(prog) prog.textContent = `${i+1}/${listenParas.length}`;
   
-  speechSynthesis.cancel();
-  const currentSession=++speakSession;
-  const u=new SpeechSynthesisUtterance(text);
-  u.lang=(pickedVoice&&pickedVoice.lang)||'zh-CN';
-  u.rate=currentSpeed;
-  u.pitch=1;
-  if(pickedVoice)u.voice=pickedVoice;
+  if(!text){ speakPara(i+1); return; }
+  
+  if(canSpeak) speechSynthesis.cancel();
+  const currentSession = ++speakSession;
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = (pickedVoice && pickedVoice.lang) || 'zh-CN';
+  u.rate = currentSpeed;
+  u.pitch = 1;
+  if(pickedVoice) u.voice = pickedVoice;
+  
+  u.onend = () => {
+    if(currentSession !== speakSession) return;
+    if(!listenPlaying) return;
+    speakPara(i+1);
+  };
+  u.onerror = (e) => {
+    if(currentSession !== speakSession) return;
+    if(!listenPlaying) return;
+    if(e.error === 'interrupted' || e.error === 'canceled') return;
+    speakPara(i+1);
+  };
   
   if (speechSynthesis.paused) speechSynthesis.resume();
-  
-  u.onend=()=>{
-    if(currentSession!==speakSession)return;
-    if(!listenPlaying)return;
-    if(listenIdx<listenParas.length-1)scheduleSpeak(listenIdx+1);
-    else finishArticle();
-  };
-  u.onerror=(e)=>{
-    if(currentSession!==speakSession)return;
-    if(!listenPlaying)return;
-    if(e.error==='interrupted'||e.error==='canceled')return;
-    if(listenIdx<listenParas.length-1)scheduleSpeak(listenIdx+1);
-    else finishArticle();
-  };
   speechSynthesis.speak(u);
 }
 
-function finishArticle(){
-  if(!listenPlaying)return;
-  const playList = getPlayList();
-  const pos = playList.findIndex(x=>x.i === curPage);
-  let nextI = -1;
-
-  if(listenLoop || selectLoop){
-    if(pos >= 0 && pos < playList.length-1) nextI = playList[pos+1].i;
-    else nextI = playList.length ? playList[0].i : curPage;
-  } else {
-    const list=DB[curCircle][curPara]||[];
-    if(curPage<list.length-1) nextI = curPage + 1;
-  }
-
-  if(nextI !== -1){
-    curPage = nextI;
+function nextPageAuto(){
+  if(!listenPlaying) return;
+  const next = findNextValidPage(curPage, 1);
+  if(next !== -1){
+    curPage = next;
     renderArticle(true);
-    
-    let validContent = false;
-    if(isListeningOutline){
-       const newArt = DB[curCircle][curPara][curPage];
-       listenParas = [];
-       if(newArt && newArt.outline && newArt.outline.length > 0){
-           const paraDoms = document.querySelectorAll('.outline-para');
-           newArt.outline.forEach((para, pIdx) => {
-              let text = `${para.label}。`;
-              if(para.tag) text += `${para.tag}。`;
-              para.items.forEach(it => { text += `${it.text}。`; });
-              listenParas.push({ textContent: text, dom: paraDoms[pIdx] || null, paraIndex: pIdx });
-           });
-           validContent = listenParas.length > 0;
-       }
-    } else {
-       const newArt = DB[curCircle][curPara][curPage];
-       if(newArt && newArt.notes[currentNoteType] && newArt.notes[currentNoteType].trim()){
-           listenParas=[...document.querySelectorAll('#out p')].filter(p=>!p.classList.contains('empty') && p.textContent.trim().length);
-           listenParas.forEach(p=>p.querySelectorAll('.blank').forEach(b=>b.classList.add('on')));
-           validContent = listenParas.length > 0;
-       }
-    }
-    
-    if(validContent) {
+    setTimeout(() => {
+      if(!listenPlaying) return;
       speakTitle();
-    } else {
-      setTimeout(finishArticle, 120);
-    }
-    return;
+    }, 220);
+  } else {
+    stopListen();
   }
-  stopListen();
 }
 
 function stopListen(){
   listenPlaying=false;
-  if(canSpeak)speechSynthesis.cancel();
+  if(canSpeak) speechSynthesis.cancel();
   document.querySelectorAll('#out p').forEach(p=>p.classList.remove('listening'));
   document.querySelectorAll('.article-title').forEach(t=>t.classList.remove('listening'));
   document.querySelectorAll('.outline-para').forEach(p=>p.style.background = 'transparent');
   const lb = document.getElementById('listenBar');
   if(lb) lb.classList.remove('show');
+  const lbPlay = document.getElementById('lbPlay');
+  if(lbPlay) lbPlay.textContent = '▶';
 }
 
 function listenToggle(){
-  if(!listenParas.length)return;
   if(listenPlaying){
     listenPlaying=false;
-    if(canSpeak)speechSynthesis.cancel();
+    if(canSpeak) speechSynthesis.cancel();
     document.querySelectorAll('#out p').forEach(p=>p.classList.remove('listening'));
     document.querySelectorAll('.article-title').forEach(t=>t.classList.remove('listening'));
-    document.getElementById('lbPlay').textContent='||';
+    document.querySelectorAll('.outline-para').forEach(p=>p.style.background = 'transparent');
+    const lbPlay = document.getElementById('lbPlay');
+    if(lbPlay) lbPlay.textContent = '▶';
   }else{
-    listenPlaying=true;
-    document.getElementById('lbPlay').textContent='||';
-    if(listenIdx<0)speakTitle();
-    else speakPara(listenIdx);
+    if(!listenParas.length || listenIdx < 0){
+      startListen();
+    } else {
+      listenPlaying = true;
+      const lbPlay = document.getElementById('lbPlay');
+      if(lbPlay) lbPlay.textContent = '||';
+      speakPara(listenIdx);
+    }
   }
 }
-function listenPrev(){if(!listenPlaying)return;if(listenIdx<=0){speakTitle();return}speakPara(listenIdx-1)}
-function listenNext(){if(!listenPlaying)return;if(listenIdx<0){speakPara(0);return}if(listenIdx<listenParas.length-1)speakPara(listenIdx+1);else finishArticle()}
-function updateListenBar(){
-  const prog=document.getElementById('lbProgress');
-  if(listenIdx<0)prog.textContent='题目';
-  else prog.textContent=`${listenIdx+1}/${listenParas.length}`;
-  const playBtn=document.getElementById('lbPlay');
-  if(playBtn)playBtn.textContent='||';
+
+function listenPrev(){
+  if(!listenPlaying) return;
+  const prev = findNextValidPage(curPage, -1);
+  if(prev !== -1){
+    curPage = prev;
+    renderArticle(true);
+    setTimeout(() => { if(listenPlaying) speakTitle(); }, 200);
+  }
+}
+
+function listenNext(){
+  if(!listenPlaying) return;
+  nextPageAuto();
 }
 
 // ============================================================
@@ -1777,7 +1822,13 @@ function markAsReviewed(targetType){
   if(!list[curPage].reviewDates) list[curPage].reviewDates = {};
   
   let typeToMark = targetType || currentNoteType;
-  list[curPage].reviewDates[typeToMark] = todayStr();
+  const today = todayStr();
+  
+  if (list[curPage].reviewDates[typeToMark] === today) {
+    list[curPage].reviewDates[typeToMark] = null;
+  } else {
+    list[curPage].reviewDates[typeToMark] = today;
+  }
   
   saveDB();
   renderArticle();
@@ -2944,10 +2995,10 @@ function toggleAllBlank() {
   if (isAllShown) {
     document.querySelectorAll('#out .blank').forEach(b => b.classList.remove('on'));
     if (canSpeak) speechSynthesis.cancel();
-    btn.textContent = '◉ 全部隐藏';
+    btn.textContent = '◉ 隐藏';
   } else {
     document.querySelectorAll('#out .blank').forEach(b => b.classList.add('on'));
-    btn.textContent = '◉ 全部显示';
+    btn.textContent = '◉ 显示';
   }
   isAllShown = !isAllShown;
 }
@@ -3854,6 +3905,14 @@ function doDirectImport(){
   await openAudioDB();
   loadRecKeys();
   render();
+  
+  // 初始化面板下拉框到默认值
+  const srcSel = document.getElementById('listenSourceSelect');
+  if (srcSel) srcSel.value = currentListenSource;
+  const rateValEl = document.getElementById('rateVal');
+  if (rateValEl) rateValEl.textContent = currentSpeed.toFixed(1) + 'x';
+  const lbSpeedEl = document.getElementById('lbSpeed');
+  if (lbSpeedEl) lbSpeedEl.textContent = currentSpeed.toFixed(1) + 'x';
 
   setTimeout(() => {
     let count = 0;
