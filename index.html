@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>论述整篇挖空</title>
-<meta name="theme-color" content="#800020">
+<meta name="theme-color" content="#ffffff">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="论述挖空">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -530,6 +530,8 @@ strong{color:#000 !important}
       <button onclick="exportAll(); toggleBackupPanel();" style="padding:12px;font-size:14px;border:1px solid var(--color-text-main);background:var(--color-text-main);color:#fff;border-radius:var(--radius-sm);cursor:pointer;font-weight:500;">导出备份 (下载JSON)</button>
       <div style="height:1px;background:var(--color-border);margin:4px 0;"></div>
       <button onclick="toggleBackupPanel(); openLibrary();" style="padding:12px;font-size:14px;border:1px dashed var(--color-border-strong);background:var(--color-bg-soft);color:var(--color-text-main);border-radius:var(--radius-sm);cursor:pointer;font-weight:500;">打开资料库</button>
+      <div style="height:1px;background:var(--color-border);margin:4px 0;"></div>
+      <button onclick="clearAllData();" style="padding:12px;font-size:14px;border:1px solid #d33;background:#fff;color:#d33;border-radius:var(--radius-sm);cursor:pointer;font-weight:500;">⚠ 清空当前数据</button>
     </div>
   </div>
 </div>
@@ -1032,7 +1034,9 @@ let zhVoices=[],pickedVoice=null;
 function isChineseVoice(v){
   const lang=(v.lang||'').toLowerCase();
   const name=(v.name||'').toLowerCase();
-  return lang.includes('zh')||/婷|月|云|黎|牧|莉|莎|珊|陶|田|语舒|美嘉|yun|yue|siri|ting|eloquence|liulian|刘恋|liu/i.test(name);
+  if(lang.includes('ko')||lang.includes('ja')) return false;
+  if(lang.includes('zh')) return true;
+  return /婷|月|云|黎|牧|莉|莎|珊|陶|田|语舒|美嘉|yue|siri|ting|eloquence|liulian|刘恋|liu/i.test(name);
 }
 function loadVoices(){
   if(!window.speechSynthesis)return;
@@ -1042,7 +1046,7 @@ function loadVoices(){
   const sel=document.getElementById('voiceSelect');
   if(!sel)return;
   if(!zhVoices.length){sel.innerHTML='<option>未找到中文声音</option>';return;}
-  const prio=['刘恋','月','Yue','Yun','Siri','黎澈','语舒','婷婷'];
+  const prio=['婷婷','语舒','黎澈','Siri','刘恋','月','Yue'];
   zhVoices.sort((a,b)=>{
     let pa=999,pb=999;
     prio.forEach((p,i)=>{if(a.name.includes(p))pa=Math.min(pa,i);if(b.name.includes(p))pb=Math.min(pb,i);});
@@ -1270,7 +1274,7 @@ function prepareParasAndSpeak(){
       let displayType = (curCircle === 'A圈保底弹药' && type === '论述') ? '论述素材' : type;
       let titleStr = `考点：${art.title}。`;
       if (type !== '名词解释') {
-        titleStr += `${displayType}题目：${art.questionTitle || art.title}。`;
+        titleStr += `${displayType}题目：${getQuestionTitle(art, type)}。`;
       } else {
         titleStr += `名词解释内容。`;
       }
@@ -1991,7 +1995,7 @@ function nextQuizQuestion() {
   document.getElementById('quizProgress').textContent = `${quizCurrentIdx + 1}/${quizQueue.length}`;
   let stem = '';
   if (q.noteType === '名词解释') stem = q.art.title;
-  else stem = q.art.questionTitle || q.art.title;
+  else stem = getQuestionTitle(q.art, q.noteType);
   document.getElementById('quizQuestionArea').innerHTML = `
     <div style="font-size:12px;color:var(--color-text-sub);margin-bottom:8px;">${esc(q.c)} / ${esc(q.p)} · ${q.noteType}</div>
     <div class="quiz-stem">${esc(stem)}</div>
@@ -2187,10 +2191,26 @@ function createEmptyArticle(title){
     outlines:{'名词解释':[],'简答':[],'论述':[]},
     notes:{'名词解释':'','简答':'','论述':''},
     questionTitle:'',
+    questionTitleJ:'',
+    questionTitleL:'',
     reviewDates:{'名词解释':null,'简答':null,'论述':null,'脉络卡':null},
     reviewHistory:{'名词解释':[],'简答':[],'论述':[],'脉络卡':[]},
     memory:{}
   };
+}
+
+function getQuestionTitle(art, type){
+  if(!art) return '';
+  if(type === '简答') return art.questionTitleJ || art.questionTitle || art.title || '';
+  if(type === '论述') return art.questionTitleL || art.questionTitle || art.title || '';
+  return art.questionTitle || art.title || '';
+}
+function setQuestionTitle(art, type, val){
+  if(!art) return;
+  val = val || '';
+  if(type === '简答') art.questionTitleJ = val;
+  else if(type === '论述') art.questionTitleL = val;
+  else art.questionTitle = val;
 }
 
 function defaultDB(){
@@ -2300,8 +2320,9 @@ function ensureDB(){
             if (!text) return;
             if (type !== '名词解释') {
                 const titleMatch = text.match(/(?:^|\n)(?:[一二三四五六七八九十]+、)?\s*(?:简答题|论述题|题目)[：:]\s*([^\n]+)/);
-                if (titleMatch && (!a.questionTitle || a.questionTitle === a.title)) {
-                    a.questionTitle = titleMatch[1].trim();
+                const curQ = getQuestionTitle(a, type);
+                if (titleMatch && (!curQ || curQ === a.title)) {
+                    setQuestionTitle(a, type, titleMatch[1].trim());
                 }
             }
         });
@@ -2711,7 +2732,7 @@ function renderArticle(silent){
   }else{
     let bodyHtml=renderContent(rawContent,keyPrefix);
     let titleHtml='';
-    let displayTitle = art.questionTitle || art.title;
+    let displayTitle = getQuestionTitle(art, currentNoteType);
     if(currentNoteType!=='名词解释'){
       titleHtml=`
         <div id="question-title-box" style="margin-bottom:24px;padding:16px;background:var(--color-bg-soft);border-radius:var(--radius-sm);transition:background .3s;">
@@ -2744,9 +2765,9 @@ function editQuestionTitle() {
   const list=DB[curCircle][curPara]||[];
   if(!list[curPage])return;
   const art=list[curPage];
-  const currentQ = art.questionTitle || '';
+  const currentQ = getQuestionTitle(art, currentNoteType);
   showUiModal('编辑题干', '修改或清空题干（清空后恢复为考点标题）：', true, currentQ, function(val){
-    art.questionTitle = val.trim();
+    setQuestionTitle(art, currentNoteType, val.trim());
     saveDB();
     renderArticle();
   });
@@ -2799,6 +2820,13 @@ function buildOutline(art, keyPrefix){
     return;
   }
   let html='';
+  if (currentNoteType !== '名词解释') {
+    const titleText = getQuestionTitle(art, currentNoteType);
+    const hasTitlePara = currentOutline.some(p => (p && p.label === '题干') && (p.items || []).some(it => it && it.type === 'title'));
+    if (titleText && !hasTitlePara) {
+      html += `<div class="outline-para"><div class="outline-para-label"><span>题干</span><span class="pl-tag">定位</span></div><div style="font-size:16px;font-weight:600;color:var(--color-text-main);padding:4px 0;margin-bottom:12px;line-height:1.6;">${esc(titleText)}</div></div>`;
+    }
+  }
   currentOutline.forEach((para,pIdx)=>{
     html+=`<div class="outline-para" id="outline-para-${pIdx}">
       <div class="outline-para-label"><span>${esc(para.label||'')}</span><span class="pl-tag">${esc(para.tag||'')}</span></div>`;
@@ -3233,6 +3261,30 @@ function downloadExport(){
 function importAll(){document.getElementById('importText').value='';document.getElementById('importModal').classList.add('show');}
 function closeImport(){document.getElementById('importModal').classList.remove('show');}
 
+function clearAllData(){
+  showUiModal('确认清空', '⚠️ 将删除本设备上的全部背诵数据（考点、脉络卡、打卡记录），不可恢复！\n\n建议先「导出备份」保存好，清空后再「导入备份」恢复。', false, '', function(){
+    try{
+      localStorage.removeItem('kf_db_v49');
+      localStorage.removeItem('kf_db_v70');
+      localStorage.removeItem('kf_db_v50');
+      localStorage.removeItem('kf_listen_progress');
+      localStorage.removeItem('kf_voice_idx');
+    }catch(e){}
+    CIRCLES = ['A圈','A圈保底弹药','B圈'];
+    PARADIGMS = {
+      'A圈':['范式A','范式B','范式C'],
+      'A圈保底弹药':['弹药'],
+      'B圈':['范式A','范式B','范式C']
+    };
+    DB = defaultDB();
+    ensureDB();
+    saveDB();
+    curCircle='A圈'; curPara='范式A'; curPage=0; currentNoteType='名词解释';
+    render();
+    uiAlert('已清空并重置为初始状态。\n现在可以「导入备份」恢复你的数据了。');
+  });
+}
+
 function doImportPaste(){
   const text=document.getElementById('importText').value.trim();
   if(!text){uiAlert('请先粘贴备份文本');return;}
@@ -3295,6 +3347,8 @@ function doImportPaste(){
                  match.outlines['论述'] = oldArt.outline;
               }
               if(oldArt.questionTitle) match.questionTitle = oldArt.questionTitle;
+              if(oldArt.questionTitleJ) match.questionTitleJ = oldArt.questionTitleJ;
+              if(oldArt.questionTitleL) match.questionTitleL = oldArt.questionTitleL;
               if(oldArt.pref) match.pref = oldArt.pref;
               merged++;
             }else{
@@ -3646,6 +3700,7 @@ function doParse(){
       return applyAutoBlank(smartSegment(str.trim()), mergedRules);
   };
   const flushBlock = () => {
+    if (!currentBase && currentTitle) currentBase = currentTitle;
     if (!currentBase || !currentType) return;
     if (!articlesMap[currentBase]) {
       articlesMap[currentBase] = { base: currentBase, N: '', J: '', L: '', JTitle: '', LTitle: '', pref: '', N_outline: [], J_outline: [], L_outline: [] };
@@ -3655,11 +3710,17 @@ function doParse(){
       if (currentOutlineItems.length > 0) articlesMap[currentBase].N_outline = [{ label: '采分点', tag: '得分点', items: currentOutlineItems.map(t => ({ type: 'red', text: t })) }];
     } else if (currentType === '简答') {
       if (currentContent.length > 0) articlesMap[currentBase].J = applyBlank(currentContent.join('\n\n'));
-      if (currentOutlineItems.length > 0) articlesMap[currentBase].J_outline = [{ label: '采分点', tag: '得分点', items: currentOutlineItems.map(t => ({ type: 'red', text: t })) }];
+      const jOutline = [];
+      if (currentTitle) jOutline.push({ label: '题干', tag: '定位', items: [{ type: 'title', text: currentTitle }] });
+      if (currentOutlineItems.length > 0) jOutline.push({ label: '采分点', tag: '得分点', items: currentOutlineItems.map(t => ({ type: 'red', text: t })) });
+      if (jOutline.length) articlesMap[currentBase].J_outline = jOutline;
       if (currentTitle) articlesMap[currentBase].JTitle = currentTitle;
     } else if (currentType === '论述') {
       if (currentContent.length > 0) articlesMap[currentBase].L = applyBlank(currentContent.join('\n\n'));
-      if (currentOutlineItems.length > 0) articlesMap[currentBase].L_outline = [{ label: '采分点', tag: '得分点', items: currentOutlineItems.map(t => ({ type: 'red', text: t })) }];
+      const lOutline = [];
+      if (currentTitle) lOutline.push({ label: '题干', tag: '定位', items: [{ type: 'title', text: currentTitle }] });
+      if (currentOutlineItems.length > 0) lOutline.push({ label: '采分点', tag: '得分点', items: currentOutlineItems.map(t => ({ type: 'red', text: t })) });
+      if (lOutline.length) articlesMap[currentBase].L_outline = lOutline;
       if (currentTitle) articlesMap[currentBase].LTitle = currentTitle;
     }
     currentType = '';
@@ -3672,13 +3733,13 @@ function doParse(){
     let line = lines[i];
     let trimmed = line.trim();
     if (!trimmed || /^[-—=]{3,}$/.test(trimmed)) continue;
-    const baseMatch = trimmed.match(/^\d+(?:\.\d+)?(?:改)?[\s·]*\s*([^\n]+)$/);
+    const baseMatch = trimmed.match(/^\d+(?:\.\d+)?(?:改)?[、，,．.\s·]*([^\n]+)$/);
     if (baseMatch && baseMatch[1].length < 30 && !baseMatch[1].includes('。')) {
         flushBlock();
         currentBase = baseMatch[1].trim();
         continue;
     }
-    const typeMatch = trimmed.match(/^(?:([一二三四五六七八九十]+)[、.．]\s*|[■▲◆]\s*)(名词解释|简答题|简答|论述题|论述素材|论述|题干|题目)[：:]?\s*(.*)$/);
+    const typeMatch = trimmed.match(/^(?:([一二三四五六七八九十]+)[、.．]\s*|[■▲◆]\s*)?(名词解释|简答题|简答|论述题|论述素材|论述|题干|题目)[：:]?\s*(.*)$/);
     if (typeMatch) {
       let typeWord = typeMatch[2];
       if (typeWord === '论述素材' || typeWord === '题干' || typeWord === '题目' || typeWord === '论述题') typeWord = '论述';
@@ -3687,6 +3748,7 @@ function doParse(){
       currentType = typeWord;
       currentTitle = typeMatch[3].trim();
       if (/^[无❌\s]+$/.test(currentTitle)) currentTitle = '';
+      state = 'text';
       continue;
     }
     if (!currentBase && !currentType && trimmed.length < 30 && !trimmed.includes('。')) {
@@ -3738,8 +3800,8 @@ function doParse(){
       if (a.N_outline && a.N_outline.length) match.art.outlines['名词解释'] = a.N_outline;
       if (a.J_outline && a.J_outline.length) match.art.outlines['简答'] = a.J_outline;
       if (a.L_outline && a.L_outline.length) match.art.outlines['论述'] = a.L_outline;
-      if (a.JTitle) match.art.questionTitle = a.JTitle;
-      else if (a.LTitle) match.art.questionTitle = a.LTitle;
+      if (a.JTitle) match.art.questionTitleJ = a.JTitle;
+      if (a.LTitle) match.art.questionTitleL = a.LTitle;
       let types = [];
       if (a.N) types.push('名解正文');
       if (a.J) types.push('简答正文');
@@ -3762,8 +3824,8 @@ function doParse(){
       if (a.N_outline && a.N_outline.length) newArt.outlines['名词解释'] = a.N_outline;
       if (a.J_outline && a.J_outline.length) newArt.outlines['简答'] = a.J_outline;
       if (a.L_outline && a.L_outline.length) newArt.outlines['论述'] = a.L_outline;
-      if (a.JTitle) newArt.questionTitle = a.JTitle;
-      else if (a.LTitle) newArt.questionTitle = a.LTitle;
+      if (a.JTitle) newArt.questionTitleJ = a.JTitle;
+      if (a.LTitle) newArt.questionTitleL = a.LTitle;
       DB[curCircle][curPara].push(newArt);
       if (firstTargetPage < 0) firstTargetPage = DB[curCircle][curPara].length - 1;
       matchDetails.push(`✨「${a.base}」\n   → 库中未找到匹配，已新建`);
