@@ -476,6 +476,7 @@ strong{color:#000 !important}
       </div>
       <div style="display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:16px;">
         <button onclick="startListen(); toggleListenPanel();" style="padding:14px;border:1px solid var(--color-primary);color:#fff;background:var(--color-primary);font-weight:600;border-radius:var(--radius-sm);font-family:inherit;font-size:15px;cursor:pointer;">▶ 开始智能连续播放</button>
+        <button onclick="resumeListen(); toggleListenPanel();" id="resumeListenBtn" style="padding:14px;border:1px solid var(--color-border-strong);color:var(--color-text-main);background:#fff;font-weight:600;border-radius:var(--radius-sm);font-family:inherit;font-size:14px;cursor:pointer;">▶ 继续上次播放</button>
       </div>
       <div style="margin-bottom:16px;padding:12px;border:1px solid var(--color-border);border-radius:var(--radius-sm);">
         <div style="font-size:13px;font-weight:600;margin-bottom:8px;">🔊 选择声音</div>
@@ -912,6 +913,20 @@ let recMode=false;
 
 let listenPlaying=false, listenLoop=false;
 let listenParas=[], listenIdx=-1;
+let lastListenContext = { circle: '', para: '', page: -1, noteType: '' };
+let lastListenIndex = -1;
+let resumeStartIdx = 0;
+
+function getListenProgress(){
+  try{ return JSON.parse(localStorage.getItem('kf_listen_progress')||'null'); }catch(e){ return null; }
+}
+function saveListenProgress(){
+  try{
+    const art = (DB[curCircle]&&DB[curCircle][curPara]&&DB[curCircle][curPara][curPage])||{};
+    const p = { circle: curCircle, para: curPara, page: curPage, noteType: currentNoteType, index: lastListenIndex, title: art.title||'' };
+    localStorage.setItem('kf_listen_progress', JSON.stringify(p));
+  }catch(e){}
+}
 let currentSpeed=1.15;
 let isListenBarCollapsed=true;
 let listenScope='current';
@@ -975,6 +990,15 @@ function toggleListenPanel(){
       listenSources=Array.from(document.querySelectorAll('.listen-source-cb:checked')).map(x=>x.value);
     };
   });
+  const rb = document.getElementById('resumeListenBtn');
+  if(rb){
+    const p = getListenProgress();
+    if(p && p.title){
+      rb.textContent = `▶ 继续上次：${p.title}`;
+    } else {
+      rb.textContent = '▶ 继续上次播放';
+    }
+  }
 }
 
 function changeListenRange(val){listenScope=val;}
@@ -1109,8 +1133,53 @@ function findNextValidPage(currentIdx, dir){
   return -1;
 }
 
+// 朗读前清洗文本：去掉挖空/标记符号，并给【小标题】后面补句号，制造停顿气口
+function cleanForSpeak(text){
+  return String(text||'')
+    .replace(/【([^】]+)】(?![，。；！？、：:])/g, '$1。')
+    .replace(/【([^】]+)】/g, '$1')
+    .replace(/〔([^〕]+)〕/g, '$1')
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/~~([^~]+)~~/g, '$1')
+    .trim();
+}
+
+function resumeListen(){
+  const p = getListenProgress();
+  if(!p || !p.circle || !p.para || p.page==null){
+    uiAlert('还没有上次的听读记录，先从头听一次吧。');
+    return;
+  }
+  if(!CIRCLES.includes(p.circle) || !PARADIGMS[p.circle] || !PARADIGMS[p.circle].includes(p.para)){
+    uiAlert('上次的听读记录已失效，请重新从头播放。');
+    return;
+  }
+  const list = DB[p.circle][p.para] || [];
+  if(p.page < 0 || p.page >= list.length){
+    uiAlert('上次的听读记录已失效，请重新从头播放。');
+    return;
+  }
+  if(!window.speechSynthesis){uiAlert('浏览器不支持语音合成');return;}
+  if(listenPlaying) stopListen();
+  curCircle = p.circle;
+  curPara = p.para;
+  curPage = p.page;
+  if(p.noteType && ['名词解释','简答','论述'].includes(p.noteType)) currentNoteType = p.noteType;
+  render();
+  lastListenContext = { circle: p.circle, para: p.para, page: p.page, noteType: currentNoteType };
+  lastListenIndex = (typeof p.index === 'number' && p.index >= 0) ? p.index : 0;
+  resumeStartIdx = lastListenIndex;
+  listenPlaying = true;
+  document.getElementById('listenBar').classList.add('show');
+  document.getElementById('lbPlay').textContent='||';
+  if(!isListenBarCollapsed)toggleListenBar(true);
+  prepareParasAndSpeak();
+}
+
 function startListen(){
   if(!window.speechSynthesis){uiAlert('浏览器不支持语音合成');return;}
+  lastListenIndex = 0;
+  lastListenContext = { circle: curCircle, para: curPara, page: curPage, noteType: currentNoteType };
   listenPlaying=true;
   document.getElementById('listenBar').classList.add('show');
   document.getElementById('lbPlay').textContent='||';
@@ -1133,7 +1202,7 @@ function prepareParasAndSpeak(){
         if (art.notes['名词解释'] && art.notes['名词解释'].trim()) {
           listenParas.push({text:`考点：${art.title}。名词解释。`,type:'header',noteType:type});
           art.notes['名词解释'].split(/\n\s*\n/).forEach((p,pIdx)=>{
-            if(p.trim())listenParas.push({text:p.replace(/[【】〔〕**]/g,'').trim(),type:'text',pIdx,noteType:type});
+            if(p.trim())listenParas.push({text:cleanForSpeak(p),type:'text',pIdx,noteType:type});
           });
         }
       } else if (type === '简答') {
@@ -1150,7 +1219,7 @@ function prepareParasAndSpeak(){
         if (art.notes['简答'] && art.notes['简答'].trim()) {
           listenParas.push({text:`简答正文。`,type:'header',noteType:type});
           art.notes['简答'].split(/\n\s*\n/).forEach((p,pIdx)=>{
-            if(p.trim())listenParas.push({text:p.replace(/[【】〔〕**]/g,'').trim(),type:'text',pIdx,noteType:type});
+            if(p.trim())listenParas.push({text:cleanForSpeak(p),type:'text',pIdx,noteType:type});
           });
         }
       } else if (type === '论述') {
@@ -1175,7 +1244,8 @@ function prepareParasAndSpeak(){
     emergencyRepeatDone = 0;
     emergencyRepeatTotal = getRepeatCount(art);
     emergencyOriginalTotal = emergencyRepeatTotal;
-    speakPara(0);
+    speakPara(resumeStartIdx);
+    resumeStartIdx = 0;
     return;
   }
 
@@ -1206,7 +1276,7 @@ function prepareParasAndSpeak(){
       }
       listenParas.push({text: titleStr, type: 'header', noteType: type});
       art.notes[type].split(/\n\s*\n/).forEach((p,pIdx)=>{
-        if(p.trim())listenParas.push({text:p.replace(/[【】〔〕**]/g,'').trim(),type:'text',pIdx,noteType:type});
+        if(p.trim())listenParas.push({text:cleanForSpeak(p),type:'text',pIdx,noteType:type});
       });
     }
   };
@@ -1228,11 +1298,15 @@ function prepareParasAndSpeak(){
   addText('简答');addOutline('简答');
   addText('论述');addOutline('论述');
   if(!listenParas.length){nextPageAuto();return;}
-  speakPara(0);
+  speakPara(resumeStartIdx);
+  resumeStartIdx = 0;
 }
 
 function speakPara(idx){
   if(!listenPlaying) return;
+  lastListenContext = { circle: curCircle, para: curPara, page: curPage, noteType: currentNoteType };
+  lastListenIndex = idx;
+  saveListenProgress();
 
   /* ===== 紧急模式：一遍播完的判断 ===== */
   if (emergencyPlayMode) {
@@ -1340,8 +1414,24 @@ function stopListen(){
 }
 
 function listenToggle(){
-  if(listenPlaying)stopListen();
-  else startListen();
+  if(listenPlaying){
+    listenPlaying=false;
+    if(window.speechSynthesis)window.speechSynthesis.cancel();
+    document.getElementById('lbPlay').textContent='▶';
+  } else {
+    if (lastListenContext.circle === curCircle &&
+        lastListenContext.para === curPara &&
+        lastListenContext.page === curPage &&
+        lastListenContext.noteType === currentNoteType &&
+        lastListenIndex !== -1) {
+      listenPlaying=true;
+      document.getElementById('lbPlay').textContent='||';
+      document.getElementById('listenBar').classList.add('show');
+      speakPara(lastListenIndex);
+    } else {
+      startListen();
+    }
+  }
 }
 
 function listenPrev(){
@@ -2644,6 +2734,9 @@ function renderArticle(silent){
       else{if(window.speechSynthesis)speechSynthesis.cancel();b.classList.remove('speaking');}
     });
   });
+  if (isAllShown) {
+    body.querySelectorAll('.blank').forEach(b => b.classList.add('on'));
+  }
   if(document.getElementById('reviewModal').classList.contains('show'))renderReviewList();
 }
 
@@ -2786,10 +2879,11 @@ function saveEditArticle(){
 }
 
 function deleteArticleContent() {
-  showUiModal('确认删除', '确定要删除当前题型的全部内容吗？此操作不可恢复。', false, '', function(){
+  showUiModal('确认删除', '确定要删除当前题型的正文和脉络卡吗？此操作不可恢复。', false, '', function(){
     const list = DB[curCircle][curPara] || [];
     if(!list[curPage]) return;
     list[curPage].notes[currentNoteType] = '';
+    if(list[curPage].outlines) list[curPage].outlines[currentNoteType] = [];
     saveDB();
     closeEditArticle();
     renderArticle();
@@ -3544,7 +3638,12 @@ function doParse(){
   let currentOutlineItems = [];
   const applyBlank = (str) => {
       if (!str) return '';
-      return applyAutoBlank(smartSegment(str.trim()), rules);
+      // 保护"序号+标签"（如"① 定义："），让它们保留可见、不被挖空，只挖空后面的内容
+      const labelSet = new Set();
+      str.replace(/^([①②③④⑤⑥⑦⑧⑨⑩]\s*[^，。；！？、：:\s]+)[：:]/gm, (m, g) => { labelSet.add(g + '：'); return m; });
+      const extraLabels = Array.from(labelSet);
+      const mergedRules = [rules, ...extraLabels].filter(Boolean).join('\n');
+      return applyAutoBlank(smartSegment(str.trim()), mergedRules);
   };
   const flushBlock = () => {
     if (!currentBase || !currentType) return;
@@ -3552,14 +3651,14 @@ function doParse(){
       articlesMap[currentBase] = { base: currentBase, N: '', J: '', L: '', JTitle: '', LTitle: '', pref: '', N_outline: [], J_outline: [], L_outline: [] };
     }
     if (currentType === '名词解释') {
-      if (currentContent.length > 0) articlesMap[currentBase].N = applyBlank(currentContent.join('\n'));
+      if (currentContent.length > 0) articlesMap[currentBase].N = applyBlank(currentContent.join('\n\n'));
       if (currentOutlineItems.length > 0) articlesMap[currentBase].N_outline = [{ label: '采分点', tag: '得分点', items: currentOutlineItems.map(t => ({ type: 'red', text: t })) }];
     } else if (currentType === '简答') {
-      if (currentContent.length > 0) articlesMap[currentBase].J = applyBlank(currentContent.join('\n'));
+      if (currentContent.length > 0) articlesMap[currentBase].J = applyBlank(currentContent.join('\n\n'));
       if (currentOutlineItems.length > 0) articlesMap[currentBase].J_outline = [{ label: '采分点', tag: '得分点', items: currentOutlineItems.map(t => ({ type: 'red', text: t })) }];
       if (currentTitle) articlesMap[currentBase].JTitle = currentTitle;
     } else if (currentType === '论述') {
-      if (currentContent.length > 0) articlesMap[currentBase].L = applyBlank(currentContent.join('\n'));
+      if (currentContent.length > 0) articlesMap[currentBase].L = applyBlank(currentContent.join('\n\n'));
       if (currentOutlineItems.length > 0) articlesMap[currentBase].L_outline = [{ label: '采分点', tag: '得分点', items: currentOutlineItems.map(t => ({ type: 'red', text: t })) }];
       if (currentTitle) articlesMap[currentBase].LTitle = currentTitle;
     }
@@ -3579,7 +3678,7 @@ function doParse(){
         currentBase = baseMatch[1].trim();
         continue;
     }
-    const typeMatch = trimmed.match(/^(?:([一二三四五六七八九十]+)[、.．]\s*|[■▲◆]\s*)(名词解释|简答|简答题|论述|论述题|论述素材|题干|题目)[：:]?\s*(.*)$/);
+    const typeMatch = trimmed.match(/^(?:([一二三四五六七八九十]+)[、.．]\s*|[■▲◆]\s*)(名词解释|简答题|简答|论述题|论述素材|论述|题干|题目)[：:]?\s*(.*)$/);
     if (typeMatch) {
       let typeWord = typeMatch[2];
       if (typeWord === '论述素材' || typeWord === '题干' || typeWord === '题目' || typeWord === '论述题') typeWord = '论述';
@@ -3595,19 +3694,21 @@ function doParse(){
         continue;
     }
     if (!currentType) continue;
-    if (trimmed.includes('第一步') || trimmed.includes('采分点清单') || trimmed.includes('得分点清单')) {
-        state = 'outline';
-        continue;
-    }
-    if (trimmed.includes('第二步') || trimmed.includes('第三步') || trimmed.includes('备考拆解') || trimmed.includes('考场实战') || trimmed.includes('参考答案')) {
-        if (trimmed.includes('考场实战版')) { currentContent = []; }
-        state = 'text';
+    if (/^(考场偏好|考试偏好|考点偏好|偏好)[：:]\s*/.test(trimmed)) continue;
+    if (/^【[^】]*】$/.test(trimmed)) {
+        if (trimmed.includes('采分点清单') || trimmed.includes('得分点清单')) {
+            state = 'outline';
+        } else if (trimmed.includes('考场实战')) {
+            state = 'skip';
+        } else if (trimmed.includes('备考拆解') || trimmed.includes('参考答案') || trimmed.includes('生成答案') || trimmed.includes('第一步') || trimmed.includes('第二步') || trimmed.includes('第三步')) {
+            state = 'text';
+        }
         continue;
     }
     if (/^[-—=]{3,}$/.test(trimmed)) continue;
     if (state === 'outline') {
-        if (/^[①②③④⑤⑥⑦⑧⑨⑩]/.test(trimmed) || /^\d+[\.\、]/.test(trimmed)) {
-            let cleanLine = trimmed.replace(/^[①②③④⑤⑥⑦⑧⑨⑩\s]+/, '').replace(/^\d+[\.\、]\s*/, '').trim();
+        if (/^[①②③④⑤⑥⑦⑧⑨⑩]/.test(trimmed) || /^\d+[\.\、]/.test(trimmed) || /^[·•\-]/.test(trimmed)) {
+            let cleanLine = trimmed.replace(/^[①②③④⑤⑥⑦⑧⑨⑩\s]+/, '').replace(/^\d+[\.\、]\s*/, '').replace(/^[·•\-]\s*/, '').trim();
             if (cleanLine) currentOutlineItems.push(cleanLine);
         }
     } else if (state === 'text') {
@@ -3624,6 +3725,7 @@ function doParse(){
   const articleList = Object.values(articlesMap);
   if (!articleList.length) { uiAlert('未能识别出任何考点，请检查文本格式。'); return; }
   let matchDetails = [];
+  let firstTargetPage = -1;
   articleList.forEach(a => {
     let match = findBestMatchInAllDB(a.base);
     let pref = getExamPreference(a.base);
@@ -3645,6 +3747,9 @@ function doParse(){
       if (a.N_outline && a.N_outline.length) types.push('名解脉络卡');
       if (a.J_outline && a.J_outline.length) types.push('简答脉络卡');
       if (a.L_outline && a.L_outline.length) types.push('论述脉络卡');
+      if (match.circle === curCircle && match.para === curPara && firstTargetPage < 0) {
+        firstTargetPage = DB[curCircle][curPara].indexOf(match.art);
+      }
       matchDetails.push(`✅「${a.base}」\n   → 导入 [${types.join('、')}] 至【${match.art.title}】`);
     } else {
       if (!DB[curCircle][curPara]) DB[curCircle][curPara] = [];
@@ -3660,6 +3765,7 @@ function doParse(){
       if (a.JTitle) newArt.questionTitle = a.JTitle;
       else if (a.LTitle) newArt.questionTitle = a.LTitle;
       DB[curCircle][curPara].push(newArt);
+      if (firstTargetPage < 0) firstTargetPage = DB[curCircle][curPara].length - 1;
       matchDetails.push(`✨「${a.base}」\n   → 库中未找到匹配，已新建`);
     }
   });
@@ -3669,8 +3775,12 @@ function doParse(){
   document.getElementById('previewArea').style.display = 'none';
   hideProgress();
   const list = DB[curCircle][curPara];
-  if (list.length > 0) curPage = list.length - 1;
+  if (firstTargetPage >= 0) curPage = firstTargetPage;
+  else if (list.length > 0) curPage = list.length - 1;
   ensureDB();
+  isAllShown = true;
+  const tBtn = document.getElementById('toggleAllBtn');
+  if (tBtn) tBtn.textContent = '◉ 隐藏';
   render();
   let msg = `处理完毕！共识别出 ${articleList.length} 个考点：\n\n` + matchDetails.join('\n\n');
   uiAlert(msg);
@@ -3697,6 +3807,9 @@ function doDirectImport(){
     hideProgress();
     curPage=DB[circleAt][paraAt].length-1;
     ensureDB();
+    isAllShown = true;
+    const tBtn = document.getElementById('toggleAllBtn');
+    if (tBtn) tBtn.textContent = '◉ 隐藏';
     render();
     uiAlert(`已导入到 ${circleAt} · ${paraAt} 的「${targetNote}」分类。\n标题：${title.trim()}`);
   });
@@ -4109,12 +4222,28 @@ document.addEventListener('DOMContentLoaded', () => {
   let isDragging = false;
   let startX, startY, initialLeft, initialTop;
   let hasMoved = false;
-  lb.addEventListener('touchstart', (e) => {
+
+  // 确保悬浮球初始收起状态与 isListenBarCollapsed 一致（否则收起后无 collapsed 类，拖拽失效）
+  if (isListenBarCollapsed) lb.classList.add('collapsed');
+
+  // 恢复上次拖拽保存的位置
+  try {
+    const saved = JSON.parse(localStorage.getItem('lb_pos') || 'null');
+    if (saved && typeof saved.left === 'number' && typeof saved.top === 'number') {
+      lb.style.right = 'auto';
+      lb.style.bottom = 'auto';
+      lb.style.left = saved.left + 'px';
+      lb.style.top = saved.top + 'px';
+    }
+  } catch (e) {}
+
+  lb.addEventListener('pointerdown', (e) => {
     if (!lb.classList.contains('collapsed')) return;
+    if (e.target.closest('button')) return;
     isDragging = true;
     hasMoved = false;
-    startX = e.touches[0].clientX;
-    startY = e.touches[0].clientY;
+    startX = e.clientX;
+    startY = e.clientY;
     const rect = lb.getBoundingClientRect();
     initialLeft = rect.left;
     initialTop = rect.top;
@@ -4122,12 +4251,13 @@ document.addEventListener('DOMContentLoaded', () => {
     lb.style.bottom = 'auto';
     lb.style.left = initialLeft + 'px';
     lb.style.top = initialTop + 'px';
-  }, {passive: false});
-  lb.addEventListener('touchmove', (e) => {
+    lb.setPointerCapture(e.pointerId);
+  });
+  lb.addEventListener('pointermove', (e) => {
     if (!isDragging) return;
     e.preventDefault();
-    const dx = e.touches[0].clientX - startX;
-    const dy = e.touches[0].clientY - startY;
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
     if (Math.abs(dx) > 5 || Math.abs(dy) > 5) hasMoved = true;
     let newLeft = initialLeft + dx;
     let newTop = initialTop + dy;
@@ -4137,13 +4267,16 @@ document.addEventListener('DOMContentLoaded', () => {
     newTop = Math.max(10, Math.min(newTop, maxY));
     lb.style.left = newLeft + 'px';
     lb.style.top = newTop + 'px';
-  }, {passive: false});
-  lb.addEventListener('touchend', (e) => {
-    if (isDragging) {
-      isDragging = false;
-      if (!hasMoved) {
-        toggleListenBar(false);
-      }
+  });
+  lb.addEventListener('pointerup', (e) => {
+    if (!isDragging) return;
+    isDragging = false;
+    if (lb.hasPointerCapture(e.pointerId)) lb.releasePointerCapture(e.pointerId);
+    if (!hasMoved) {
+      toggleListenBar(false);
+    } else {
+      const rect = lb.getBoundingClientRect();
+      try { localStorage.setItem('lb_pos', JSON.stringify({ left: rect.left, top: rect.top })); } catch (e) {}
     }
   });
 });
